@@ -1,0 +1,54 @@
+@import "config";
+
+
+
+.search-box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 50px;
+	border-radius: 25px;
+	// padding: 0 23px;
+	background-color: $light-secondary-color;
+	transition: filter 0.2s ease-in-out;
+
+
+	input[type="text"] {
+		width: 100%;
+		height: 100%;
+		border-radius: 25px;
+		padding: 23px;
+		border: 2px solid transparent;
+		outline: none;
+		background-color: transparent;
+		font-size: 16px;
+		color: $light-text-header-color;
+		transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+		&::placeholder {
+			color: $light-text-body-color;
+		}
+	}
+
+	&:hover,
+	&:focus-within {
+		filter: drop-shadow(0px 0px 15px $drop-shadow-color);
+	}
+	
+
+	.img-box {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 23px;
+		border-radius: 25px;
+		height: 100%;
+		cursor: pointer;
+		transition: background-color 0.2s ease-in-out;
+
+		&:hover {
+			background-color: $accent-color-2;
+		}
+	}
+}

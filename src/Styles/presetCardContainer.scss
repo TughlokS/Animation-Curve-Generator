@@ -1,0 +1,34 @@
+@import 'config';
+
+
+
+.preset-card-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	width: 100%;
+	padding-right: 10px;
+	height: 400px;
+	gap: 20px;
+
+	overflow-y: scroll;
+	overflow-x: hidden;
+	// border: 1px solid red;
+
+	/* Custom scrollbar for WebKit browsers */
+	&::-webkit-scrollbar {
+		width: 5px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: $light-secondary-color;
+		border-radius: 10px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		// background-color: $light-text-body-color;
+		background-color: $accent-color-2;
+		border-radius: 10px;
+	}
+}

@@ -1,0 +1,16 @@
+@import "config";
+
+
+
+.animation-group {
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	flex-direction: column;
+	width: 50%;
+	height: 100%;
+	gap: 23px;
+	padding: 25px;
+	border-radius: 35px;
+	background-color: $light-secondary-color;
+}

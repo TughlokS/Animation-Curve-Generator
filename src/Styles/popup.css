@@ -1,0 +1,82 @@
+/* src/Styles/Popup.css */
+/* --------------------------------- COLORS --------------------------------- */
+/* --------------------------------- FONTS --------------------------------- */
+.popup {
+  position: fixed;
+  /* width: 200px; Set a fixed width or make it dynamic as needed */
+  background-color: #fdfdfd;
+  color: #22262e;
+  padding: 10px 40px;
+  border-radius: 10px;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  align-items: center;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 0px 30px rgba(4, 21, 58, 0.411);
+  border: 3px solid #22262e;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.popup-icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.popup-content {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Positioning Transformations */
+/* Cursor-Based Positions */
+.popup-top-cursor {
+  transform: translate(-50%, -100%);
+}
+
+.popup-bottom-cursor {
+  transform: translate(-50%, 0%);
+}
+
+.popup-left-cursor {
+  transform: translate(-100%, -50%);
+}
+
+.popup-right-cursor {
+  transform: translate(0%, -50%);
+}
+
+/* Object-Based Positions */
+.popup-top-obj {
+  transform: translate(0%, -100%);
+}
+
+.popup-bottom-obj {
+  transform: translate(0%, 0%);
+}
+
+.popup-left-obj {
+  transform: translate(-100%, 0%);
+}
+
+.popup-right-obj {
+  transform: translate(0%, 0%);
+}
+
+/* Screen-Based Positions */
+/* .popup-screen-top-left,
+ .popup-screen-top-center,
+ .popup-screen-top-right,
+ .popup-screen-center,
+ .popup-screen-bottom-left,
+ .popup-screen-bottom-center,
+ .popup-screen-bottom-right,
+ .popup-screen-left-center,
+ .popup-screen-right-center {
+transform: translate(-50%, -50%);
+ }
+  *//*# sourceMappingURL=popup.css.map */

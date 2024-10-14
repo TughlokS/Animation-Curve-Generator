@@ -1,0 +1,105 @@
+@import 'config';
+
+.move-animation-card {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+    width: 100%;
+    background-color: $light-primary-color; /* Ensure $light-secondary-color is correctly set */
+    border-radius: 15px;
+
+    .animation-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        width: 100%;
+
+        .title-body {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: row;
+            gap: 10px;
+            flex-grow: 1; /* Allows title and body to take available space */
+            max-width: calc(100% - 30px); /* 20px for copy button + 10px gap */
+            box-sizing: border-box;
+        }
+
+        .animation-title {
+            font-size: 16px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-shrink: 1; /* Allows the title to shrink */
+            max-width: 50%; /* Maximum 50% of the card's width */
+            box-sizing: border-box;
+            padding-right: 10px;
+        }
+
+        .animation-body {
+            font-size: 16px;
+            font-weight: 400;
+            color: #a1a1a1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-shrink: 1; /* Allows the body text to shrink */
+            max-width: 50%; /* Maximum 50% of the card's width */
+            box-sizing: border-box;
+        }
+
+        .animation-copy-btn {
+            padding: 5px;
+            border-radius: 7px;
+            transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+            &:hover {
+                background-color: $dark-primary-color;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            }
+
+            &:hover .animation-copy-btn-icon {
+                background-color: $light-secondary-color;
+            }
+        }
+
+        .animation-copy-btn-icon {
+            width: 20px;
+            height: 20px;
+            padding: 2.5px;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #22262e; /* Ensure this variable is defined in config.scss */
+            transition: background-color 0.2s ease-in-out;
+
+            /* Apply the mask */
+            -webkit-mask-image: url("/copy.svg");
+            mask-image: url("/copy.svg");
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            -webkit-mask-size: contain;
+            mask-size: contain;
+        }
+    }
+
+    .move-animation-object {
+        width: 50px;
+        height: 50px;
+        border-radius: 12.5px;
+        /* Additional styling for the animation object if needed */
+    }
+}
+
+/* Tooltip Styling */
+.custom-animation-card-tooltip {
+    border-radius: 10px !important;
+    background-color: $dark-primary-color !important; /* Ensure $accent-color-2 is correctly set */
+    /* Add any additional styles for consistency */
+}

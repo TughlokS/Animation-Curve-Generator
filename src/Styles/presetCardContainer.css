@@ -1,0 +1,26 @@
+/* --------------------------------- COLORS --------------------------------- */
+/* --------------------------------- FONTS --------------------------------- */
+.preset-card-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-right: 10px;
+  height: 400px;
+  gap: 20px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  /* Custom scrollbar for WebKit browsers */
+}
+.preset-card-container::-webkit-scrollbar {
+  width: 5px;
+}
+.preset-card-container::-webkit-scrollbar-track {
+  background: #fdfdfd;
+  border-radius: 10px;
+}
+.preset-card-container::-webkit-scrollbar-thumb {
+  background-color: #00b7ff;
+  border-radius: 10px;
+}/*# sourceMappingURL=presetCardContainer.css.map */

@@ -1,0 +1,12 @@
+/* --------------------------------- COLORS --------------------------------- */
+/* --------------------------------- FONTS --------------------------------- */
+.canvas-group {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  gap: 23px;
+  width: 50%;
+  min-width: 350px;
+  height: 100%;
+}/*# sourceMappingURL=canvasGroup.css.map */
