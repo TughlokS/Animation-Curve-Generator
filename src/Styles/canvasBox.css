@@ -77,6 +77,22 @@
   border-right: 1px solid rgb(202, 202, 202);
 }
 .canvas-box .canvas-buttons .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3px;
+  border-radius: 5px;
+  background-color: #fdfdfd;
+  transition: all 0.2s ease-in-out;
+}
+.canvas-box .canvas-buttons .btn:hover {
+  background-color: #ff1861;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
+}
+.canvas-box .canvas-buttons .btn:hover .grid-btn-icon, .canvas-box .canvas-buttons .btn:hover .fit-btn-icon, .canvas-box .canvas-buttons .btn:hover .save-btn-icon {
+  background-color: #fdfdfd;
+}
+.canvas-box .canvas-buttons .icon-btn {
   position: relative;
   display: flex;
   justify-content: center;
@@ -95,20 +111,35 @@
   -webkit-mask-size: contain;
   mask-size: contain;
 }
-.canvas-box .canvas-buttons .btn:hover {
-  background-color: #ff1861;
-}
-.canvas-box .canvas-buttons .grid-btn {
+.canvas-box .canvas-buttons .grid-btn-icon {
   -webkit-mask-image: url("./grid.svg");
   mask-image: url("./grid.svg");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }
-.canvas-box .canvas-buttons .fit-btn {
+.canvas-box .canvas-buttons .fit-btn-icon {
   -webkit-mask-image: url("/fit.svg");
   mask-image: url("/fit.svg");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }
-.canvas-box .canvas-buttons .save-btn {
+.canvas-box .canvas-buttons .save-btn-icon {
   -webkit-mask-image: url("/save.svg");
   mask-image: url("/save.svg");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }
 
 #tooltip {

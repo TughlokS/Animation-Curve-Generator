@@ -96,8 +96,28 @@
 			}
 		}
 
-	
 		.btn {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 3px;
+			border-radius: 5px;
+			background-color: $light-secondary-color;
+			// box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+			// border: 1px solid red;
+			transition: all 0.2s ease-in-out;
+
+			&:hover {
+				background-color: $accent-color-1;
+				box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
+
+				.grid-btn-icon, .fit-btn-icon, .save-btn-icon {
+					background-color: $light-secondary-color;
+				}
+			}
+		}
+	
+		.icon-btn {
 			position: relative;
 			display: flex;
 			justify-content: center;
@@ -118,24 +138,38 @@
 			mask-size: contain;
 		}
 	
-		.btn:hover {
-			background-color: $accent-color-1;
-		}
-	
 		/* Specific masks for each button */
-		.grid-btn {
+		.grid-btn-icon {
 			-webkit-mask-image: url('./grid.svg');
 			mask-image: url('./grid.svg');
+			-webkit-mask-repeat: no-repeat;
+			mask-repeat: no-repeat;
+			-webkit-mask-position: center;
+			mask-position: center;
+			-webkit-mask-size: contain;
+			mask-size: contain;
 		}
 	
-		.fit-btn {
+		.fit-btn-icon {
 			-webkit-mask-image: url('/fit.svg');
 			mask-image: url('/fit.svg');
+			-webkit-mask-repeat: no-repeat;
+			mask-repeat: no-repeat;
+			-webkit-mask-position: center;
+			mask-position: center;
+			-webkit-mask-size: contain;
+			mask-size: contain;
 		}
 	
-		.save-btn {
+		.save-btn-icon {
 			-webkit-mask-image: url('/save.svg');
 			mask-image: url('/save.svg');
+			-webkit-mask-repeat: no-repeat;
+			mask-repeat: no-repeat;
+			-webkit-mask-position: center;
+			mask-position: center;
+			-webkit-mask-size: contain;
+			mask-size: contain;
 		}
 	}
 	

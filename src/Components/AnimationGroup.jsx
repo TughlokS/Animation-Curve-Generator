@@ -10,7 +10,7 @@ function AnimationGroup() {
 
 			<MoveAnimationCard title='Curve' bodyText='0.0, 0.0, 1.0, 1.0' backgroundColor='#ff1861'/>
 
-			<MoveAnimationCard title='Preset' bodyText='0.0, 0.0, 1.0, 1.0' backgroundColor='#00b7ff'/>
+			<MoveAnimationCard title='Preset' bodyText='0.0, 0.0, 1.0, 1.0' backgroundColor='#00e1ff'/>
 
 			<MoveAnimationCard title='Linear' bodyText='0.0, 0.0, 1.0, 1.0' backgroundColor='#18ffb2'/>
 

@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 
 import '../Styles/moveAnimationCard.css';
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import useOverflow from './useOverFlow'; // Adjust the path as necessary
 import usePopup from './usePopup';
@@ -40,6 +40,8 @@ function MoveAnimationCard({
             });
     };
 
+    const [currentCopyBtnBackgroundColor, setCurrentCopyBtnBackgroundColor] = useState("transparent");
+
     return (
         <div className="move-animation-card">
 
@@ -70,6 +72,9 @@ function MoveAnimationCard({
                     data-tooltip-id="copy-tooltip" 
                     data-tooltip-content="Copy"
                     aria-label="Copy"
+                    onMouseEnter={() => setCurrentCopyBtnBackgroundColor(backgroundColor)}
+                    onMouseLeave={() => setCurrentCopyBtnBackgroundColor("transparent")}
+                    style={{ backgroundColor: currentCopyBtnBackgroundColor }}
                     onClick={handleCopy}
                     role="button"
                     tabIndex={0}
@@ -85,7 +90,7 @@ function MoveAnimationCard({
                 id="title-tooltip"
                 place="top"
                 effect="solid"
-                delayShow={150}
+                delayShow={400}
                 arrowColor='transparent'
                 className="custom-animation-card-tooltip"
             />
@@ -93,7 +98,7 @@ function MoveAnimationCard({
                 id="body-tooltip"
                 place="top"
                 effect="solid"
-                delayShow={150}
+                delayShow={400}
                 arrowColor='transparent'
                 className="custom-animation-card-tooltip"
             />
@@ -101,8 +106,9 @@ function MoveAnimationCard({
                 id="copy-tooltip"
                 place="top"
                 effect="solid"
-                delayShow={150}
+                delayShow={400}
                 arrowColor='transparent'
+                // style={{ backgroundColor: currentCopyBtnBackgroundColor }}
                 className="custom-animation-card-tooltip"
             />
 

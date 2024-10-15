@@ -46,19 +46,25 @@ function CanvasBox() {
                 <div 
 					className="btn grid-btn" 
 					data-tooltip-id="tooltip" 
-					data-tooltip-content="Snap to Grid">	
+					data-tooltip-content="Snap to Grid">
+
+                    <div className="icon-btn grid-btn-icon"></div>
 				</div>
 
                 <div 
 					className="btn fit-btn" 
 					data-tooltip-id="tooltip" 
 					data-tooltip-content="Fit to Canvas">
+
+                    <div className="icon-btn fit-btn-icon"></div>
 				</div>
 
                 <div 
 					className="btn save-btn" 
 					data-tooltip-id="tooltip" 
 					data-tooltip-content="Save">
+
+                    <div className="icon-btn save-btn-icon"></div>
 				</div>
 
                 <ReactTooltip 
