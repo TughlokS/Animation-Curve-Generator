@@ -4,8 +4,8 @@
 import '../Styles/moveAnimationCard.css';
 import { useRef, useState } from "react";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import useOverflow from './useOverFlow'; // Adjust the path as necessary
-import usePopup from './usePopup';
+import useOverflow from '../Hooks/useOverFlow'; // Adjust the path as necessary
+import usePopup from '../Hooks/usePopup';
 
 
 

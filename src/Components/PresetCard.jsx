@@ -2,9 +2,8 @@ import { useId, useRef } from 'react';
 import '../Styles/presetCard.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import PropTypes from 'prop-types';
-import useOverflow from './useOverFlow';
-import usePopup from './usePopup';
-// import {FaCheckCircle} from 'react-icons/fa';
+import useOverflow from '../Hooks/useOverFlow';
+import usePopup from '../Hooks/usePopup';
 
 
 
@@ -33,7 +32,6 @@ function PresetCard({
             .then(() => {
                 triggerPopup({
                     content: `Copied`,
-                    // icon: <FaCheckCircle/>,
                     duration: 500,
                     position: 'screen-top-center',
                 })
