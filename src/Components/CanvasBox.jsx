@@ -1,25 +1,30 @@
-import { useState } from 'react';
 import '../Styles/canvasBox.css';
 import Canvas from './Canvas';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+import { PropTypes } from 'prop-types';
 
 
 
-function CanvasBox() {
+CanvasBox.propTypes = {
+    bezierValues: PropTypes.object.isRequired,
+    setBezierValue: PropTypes.func.isRequired
+}
 
-    const [curveValues, setCurveValues] = useState({
-        'curve-value1': 0,
-        'curve-value2': 0,
-        'curve-value3': 1,
-        'curve-value4': 1
-    });
+function CanvasBox({ bezierValues, setBezierValue }) {
 
-    const handleCurveValueChange = (id, newValue) => {
-        setCurveValues(prevValues => ({
+    // Handle changes in the curve values
+    const handleCurveValueChange = (controlPoint, axis, value) => {
+        // Update the bezier values using the setBezierValue prop
+        const updatedValue = parseFloat(value);
+        setBezierValue(prevValues => ({
             ...prevValues,
-            [id]: parseFloat(newValue) || 0
+            [controlPoint]: {
+                ...prevValues[controlPoint],
+                [axis]: updatedValue
+            }
         }));
     };
+
 
     return (
         <div className='canvas-box'>
@@ -27,20 +32,51 @@ function CanvasBox() {
             <div className="canvas-buttons">
 
                 <div className="curve-value-box">
-                    {Object.keys(curveValues).map((key) => (
-                        <input 
-                        key={key}
-                        className="curve-values" 
-                        id={key} 
-                        type="number" 
-                        min={-9} 
+                    {/* Inputs for cp1.X, cp1.Y, cp2.X, and cp2.Y */}
+                    <input
+                        className="curve-values"
+                        id="cp1X"
+                        type="number"
+                        min={-9}
                         max={9}
-                        step={0.05} 
-                        value={curveValues[key]}
-                        onChange={(e) => handleCurveValueChange(key, e.target.value)}
-                        aria-label={`Curve Value ${key.slice(-1)}`}
-                        />
-                    ))}
+                        step={0.05}
+                        value={bezierValues.cp1.X}
+                        onChange={(e) => handleCurveValueChange('cp1', 'X', e.target.value)}
+                        aria-label="Curve Value cp1X"
+                    />
+                    <input
+                        className="curve-values"
+                        id="cp1Y"
+                        type="number"
+                        min={-9}
+                        max={9}
+                        step={0.05}
+                        value={bezierValues.cp1.Y}
+                        onChange={(e) => handleCurveValueChange('cp1', 'Y', e.target.value)}
+                        aria-label="Curve Value cp1Y"
+                    />
+                    <input
+                        className="curve-values"
+                        id="cp2X"
+                        type="number"
+                        min={-9}
+                        max={9}
+                        step={0.05}
+                        value={bezierValues.cp2.X}
+                        onChange={(e) => handleCurveValueChange('cp2', 'X', e.target.value)}
+                        aria-label="Curve Value cp2X"
+                    />
+                    <input
+                        className="curve-values"
+                        id="cp2Y"
+                        type="number"
+                        min={-9}
+                        max={9}
+                        step={0.05}
+                        value={bezierValues.cp2.Y}
+                        onChange={(e) => handleCurveValueChange('cp2', 'Y', e.target.value)}
+                        aria-label="Curve Value cp2Y"
+                    />
                 </div>
 
                 <div 
@@ -77,7 +113,7 @@ function CanvasBox() {
 
             </div>
 
-            <Canvas />
+            <Canvas setBezierValues={setBezierValue} />
 
         </div>
     );

@@ -7,20 +7,21 @@
   flex-direction: column;
   padding: 25px;
   gap: 23px;
-  height: 100%;
   background-color: #fdfdfd;
   border-radius: 35px;
 }
 .canvas-box canvas {
-  width: 100%;
-  height: 100%;
-  background-color: #e7eef1;
+  width: 661px;
+  height: 500px;
+  border: 2px solid transparent;
+  background-color: #2d3139;
   border-radius: 15px;
   box-shadow: inset 0px 0px 15px rgba(0, 0, 0, 0.1450980392);
-  transition: box-shadow 0.3s ease-in-out;
+  transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
 }
 .canvas-box canvas:hover {
   box-shadow: inset 0px 0px 20px #ff1861;
+  border-color: #ff1861;
 }
 .canvas-box .canvas-buttons {
   display: flex;
@@ -70,7 +71,7 @@
   width: 60px;
   padding: 5px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: bold;
   transition: color 0.2s ease-in-out;
 }
 .canvas-box .canvas-buttons .curve-value-box .curve-values:nth-child(1), .canvas-box .canvas-buttons .curve-value-box .curve-values:nth-child(2), .canvas-box .canvas-buttons .curve-value-box .curve-values:nth-child(3) {

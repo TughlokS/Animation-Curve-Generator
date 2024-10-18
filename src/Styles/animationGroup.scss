@@ -13,4 +13,12 @@
 	padding: 25px;
 	border-radius: 35px;
 	background-color: $light-secondary-color;
+
+	// &:has(.move-animation-card:hover) .move-animation-card {
+	// 	filter: blur(5px) opacity(0.1);
+	// }
+
+	// &:hover .move-animation-card:hover {
+	// 	filter: none;
+	// }
 }
