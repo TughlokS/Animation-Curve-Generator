@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import '../Styles/animationGroup.css'
 import MoveAnimationCard from './MoveAnimationCard'
-import { accentColors } from '../Helpers/env';
+import { scssColors } from '../Helpers/env';
 import { PropTypes } from 'prop-types';
 
 
@@ -47,27 +47,36 @@ function AnimationGroup( { bezierValuesCurve, bezierValuesPreset, bezierValuesLi
 	const [animationSpeed, setAnimationSpeed] = useState(0.5);
 	const [nextAnimationDelay, setNextAnimationDelay] = useState(0.5);
 
+	const overshoot = {
+		cp1: { X: 0.5, Y: 0 },
+		cp2: { X: -0.25, Y: 1 },
+	};
+
 	return (
 		<div className="animation-group">
+
+			<div className="time-slider-container">
+				
+			</div>
 
 			<MoveAnimationCard
 				title='Curve' 
 				bezierValues={bezierValuesCurve} 
-				backgroundColor={accentColors.accent_red}
+				backgroundColor={scssColors.accent_red}
 				animationSpeed={animationSpeed}
 				nextAnimationDelay={nextAnimationDelay}
 			/>
 			<MoveAnimationCard
 				title='Preset' 
 				bezierValues={bezierValuesPreset}
-				backgroundColor={accentColors.accent_blue}
+				backgroundColor={scssColors.accent_blue}
 				animationSpeed={animationSpeed}
 				nextAnimationDelay={nextAnimationDelay}
 			/>
 			<MoveAnimationCard
 				title='Linear' 
 				bezierValues={bezierValuesLinear}
-				backgroundColor={accentColors.accent_green}
+				backgroundColor={scssColors.accent_green}
 				animationSpeed={animationSpeed}
 				nextAnimationDelay={nextAnimationDelay}
 			/>

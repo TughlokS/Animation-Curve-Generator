@@ -1,18 +1,33 @@
+/* eslint-disable no-unused-vars */
 import '../Styles/canvasBox.css';
 import Canvas from './Canvas';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { PropTypes } from 'prop-types';
+import { useRef, useState } from 'react';
+// import { scssColors } from '../Helpers/env';
 
 
 
 CanvasBox.propTypes = {
     bezierValues: PropTypes.object.isRequired,
-    setBezierValue: PropTypes.func.isRequired
+    setBezierValue: PropTypes.func.isRequired,
+    presetArray: PropTypes.array.isRequired,
+    setPresetArray: PropTypes.func.isRequired
 }
 
-function CanvasBox({ bezierValues, setBezierValue }) {
+function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }) {
 
-    // Handle changes in the curve values
+    // state variables
+    // button state variables
+    const [snapToGrid, setSnapToGrid] = useState(false);
+    // const [fitToScreen, setFitToScreen] = useState(null);
+    const fitToScreenRef = useRef(null);
+    const saveRef = useRef(null);
+    const [isSaved, setIsSaved] = useState(false);
+    const [saveTooltip, setSaveTooltip] = useState("Save");
+
+
+    /* ------------------- Handle changes in the curve values ------------------- */
     const handleCurveValueChange = (controlPoint, axis, value) => {
         // Update the bezier values using the setBezierValue prop
         const updatedValue = parseFloat(value);
@@ -24,6 +39,23 @@ function CanvasBox({ bezierValues, setBezierValue }) {
             }
         }));
     };
+
+
+    /* -------------- handle save button click if not already saved ------------- */
+    const createNewPreset = () => {
+        const newPreset = {
+            title: 'New Preset',
+            bezierValue: bezierValues
+        }
+        
+        setPresetArray(prevArray => [...prevArray, newPreset]);
+    };
+	const handleSaveClick = () => {
+        if (!isSaved) {
+            createNewPreset();
+        }
+	};
+
 
 
     return (
@@ -80,27 +112,47 @@ function CanvasBox({ bezierValues, setBezierValue }) {
                 </div>
 
                 <div 
-					className="btn grid-btn" 
+					className={`btn grid-btn ${snapToGrid ? 'active' : ''}`}
 					data-tooltip-id="tooltip" 
-					data-tooltip-content="Snap to Grid">
+					data-tooltip-content="Snap to Grid"
+                    role='button'
+                    tabIndex={0}
+                    onClick={() => setSnapToGrid(!snapToGrid)}
+                >
 
-                    <div className="icon-btn grid-btn-icon"></div>
+                    <div 
+                        className={`icon-btn grid-btn-icon ${snapToGrid ? 'active' : ''}`}
+                    ></div>
 				</div>
 
                 <div 
 					className="btn fit-btn" 
 					data-tooltip-id="tooltip" 
-					data-tooltip-content="Fit to Canvas">
+					data-tooltip-content="Fit to Canvas"
+                    role='button'
+                    tabIndex={0}
+                    onClick={() => {
+                        if (fitToScreenRef.current) {
+                            fitToScreenRef.current();
+                        }
+                    }}
+                >
 
                     <div className="icon-btn fit-btn-icon"></div>
 				</div>
 
                 <div 
-					className="btn save-btn" 
+					className={`btn save-btn ${isSaved ? 'active' : ''}`}
 					data-tooltip-id="tooltip" 
-					data-tooltip-content="Save">
+					data-tooltip-content={saveTooltip}
+                    role='button'
+                    tabIndex={0}
+                    onClick={handleSaveClick}
+                >
 
-                    <div className="icon-btn save-btn-icon"></div>
+                    <div 
+                        className={`icon-btn save-btn-icon ${isSaved ? 'active' : ''}`}
+                    ></div>
 				</div>
 
                 <ReactTooltip 
@@ -113,7 +165,15 @@ function CanvasBox({ bezierValues, setBezierValue }) {
 
             </div>
 
-            <Canvas setBezierValues={setBezierValue} />
+            <Canvas 
+                setBezierValues={setBezierValue} 
+                snapToGrid={snapToGrid}
+                fitToScreenRef={fitToScreenRef}
+                saveRef={saveRef}
+                setIsSaved={setIsSaved}
+                setSaveTooltip={setSaveTooltip}
+                presetArray={presetArray}
+            />
 
         </div>
     );

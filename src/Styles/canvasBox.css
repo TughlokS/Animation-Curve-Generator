@@ -86,6 +86,15 @@
   background-color: #fdfdfd;
   transition: all 0.2s ease-in-out;
 }
+.canvas-box .canvas-buttons .btn.active {
+  background-color: #ff1861;
+}
+.canvas-box .canvas-buttons .btn.active:hover {
+  background-color: #fdfdfd;
+}
+.canvas-box .canvas-buttons .btn.active:hover .grid-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .fit-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .save-btn-icon {
+  background-color: #ff1861;
+}
 .canvas-box .canvas-buttons .btn:hover {
   background-color: #ff1861;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
@@ -111,6 +120,9 @@
   mask-position: center;
   -webkit-mask-size: contain;
   mask-size: contain;
+}
+.canvas-box .canvas-buttons .icon-btn.active {
+  background-color: #fdfdfd;
 }
 .canvas-box .canvas-buttons .grid-btn-icon {
   -webkit-mask-image: url("./grid.svg");

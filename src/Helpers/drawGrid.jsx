@@ -28,7 +28,7 @@ export function drawGrid(ctx, canvasWidth, canvasHeight, cellSize, offsetX = 0, 
 	const gridWideBoxColor = gridColors.gridWideBoxColor_dark;
 	const gridAxisColor = gridColors.gridAxisColor_dark;
 	// adjust offset to match tradition graph axis coordinates 
-	offsetX = offsetX === 0 ? 0 : offsetX * -1; // -x went right previously now goes left
+	offsetX *= -1; // -x went right previously now goes left
 	globalOffsetX = offsetX;
 	// clear the entire canvas before drawing to not keep previous drawings
 	ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -51,7 +51,7 @@ export function drawGrid(ctx, canvasWidth, canvasHeight, cellSize, offsetX = 0, 
 	const halfHeight = (canvasHeight / 2) / scale;
 
 	// determine the range for grid lines
-	let drawDistance = 10; // increase or decrease drawDistance to increase or decrease grid render distance
+	let drawDistance = 1; // increase or decrease drawDistance to increase or decrease grid render distance
 	drawDistance += Math.abs(Math.max(Math.abs(offsetX), Math.abs(offsetY)));
 	const startX = -halfWidth - (cellSize * drawDistance);
 	const endX = halfWidth + (cellSize * drawDistance);
@@ -140,7 +140,7 @@ export const getGridPosition = (x, y, canvasRect) => {
 	const gridX = -(canvasX - width / 2) / (globalCellSize * globalScale) - globalOffsetX;
 	const gridY = -(canvasY - height / 2) / (globalCellSize * globalScale) - globalOffsetY;
 
-	return { x: -gridX / 10, y: gridY / 10};
+	return { X: -gridX / 10, Y: gridY / 10};
 }
 /* -------------------------------------------------------------------------- */
 /*               CONVERTS X, Y COORDINATES INTO CANVAS POSITIONS              */

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { drawGrid, getCanvasPosition, getGridPosition } from '../Helpers/drawGrid';
 import { drawCurve } from '../Helpers/drawCurve';
@@ -9,16 +10,49 @@ import { PropTypes } from 'prop-types';
 
 
 Canvas.propTypes = {
-	setBezierValues: PropTypes.func.isRequired
+	setBezierValues: PropTypes.func.isRequired,
+	snapToGrid: PropTypes.bool.isRequired,
+	fitToScreenRef: PropTypes.object.isRequired,
+	saveRef: PropTypes.object.isRequired,
+	setIsSaved: PropTypes.func.isRequired,
+	setSaveTooltip: PropTypes.func.isRequired,
+	presetArray: PropTypes.array.isRequired
 }
 
-function Canvas({ setBezierValues }) {
+function Canvas({ 
+	setBezierValues, 
+	snapToGrid, 
+	fitToScreenRef, 
+	saveRef, 
+	setIsSaved,
+	setSaveTooltip,
+	presetArray
+}) {
 
 	/* ------------------- BEZIER VALUES CREATED BY THE CURVE ------------------- */
-	// const [bezierValues, setBezierValues] = useState({
-	// 	cp1: { X: 0, Y: 0 },
-	// 	cp2: { X: 1, Y: 1 },
-	// });
+	// const presetArray = [
+	// 	{
+	// 		title: 'Linear',
+	// 		bezierValue: {
+	// 		cp1: { X: 0, Y: 0 },
+	// 		cp2: { X: 1, Y: 1 },
+	// 		}
+	// 	},
+	// 	{
+	// 		title: 'Ease',
+	// 		bezierValue: {
+	// 		cp1: { X: 0.25, Y: 0.1 },
+	// 		cp2: { X: 0.25, Y: 1 },
+	// 		}
+	// 	},
+	// 	{
+	// 		title: 'Ease-In',
+	// 		bezierValue: {
+	// 		cp1: { X: 0.42, Y: 0 },
+	// 		cp2: { X: 1, Y: 1 },
+	// 		}
+	// 	}
+	// ];
 	/* ------------------- BEZIER VALUES CREATED BY THE CURVE ------------------- */
 
 	/* ----------------------- variables for canvas setup ----------------------- */
@@ -28,6 +62,9 @@ function Canvas({ setBezierValues }) {
 	const cellSize = 40;
 	const defaultScale = 0.75;
 	const defaultOffset = { x: -5, y: -5 };
+	const minMaxOffsetX = { min: -5, max: -5 };
+	const minMaxOffsetY = { min: -19, max: 19 };
+	const scrollSpeed = 2.5; // default 1 (1 = along with cursor)
 
 	// state variables
 	const [canvasSize, setCanvasSize] = useState({ width: 661, height: 500 });
@@ -43,7 +80,8 @@ function Canvas({ setBezierValues }) {
 	const [controlPoint1, setControlPoint1] = useState({ X: 0.25, Y: 0.1 });
 	const [controlPoint2, setControlPoint2] = useState({ X: 0.25, Y: 1 });
 	const [draggingControlPoint, setDraggingControlPoint] = useState(null); // null, 'cp1', or 'cp2'
-	const [snapToGrid, setSnapToGrid] = useState(false);
+	const [lastDraggedControlPoint, setLastDraggedControlPoint] = useState(null); // null, 'cp1', or 'cp2'
+	// const [snapToGrid, setSnapToGrid] = useState(false);
 
 
 	/* --------------------------- update canvas size --------------------------- */
@@ -82,7 +120,10 @@ function Canvas({ setBezierValues }) {
 	}, [canvasSize, offsetX, offsetY, scale, controlPoint1, controlPoint2]);
 
 
-	/* -------------------------- MOUSE EVENT HANDLERS -------------------------- */
+
+	/* -------------------------------------------------------------------------- */
+	/*                            MOUSE EVENT HANDLERS                            */
+	/* -------------------------------------------------------------------------- */
 	// prevent the default behavior of the right mouse button
 	const handleContextMenu = (e) => {
 		e.preventDefault();
@@ -106,7 +147,10 @@ function Canvas({ setBezierValues }) {
 	/* ---------------- use mouse buttons to drag items in canvas --------------- */
 	const handleMouseDown = (e) => {
 		e.preventDefault();
+
+		// left mouse button held down initiates grid dragging > store mouse pos
 		const { clientX, clientY } = e;
+
 		// left mouse button held down initiates control point dragging
 		if (e.button === 0) {
 			const canvasRect = canvasRef.current.getBoundingClientRect();
@@ -128,8 +172,10 @@ function Canvas({ setBezierValues }) {
 
 			if (distanceToCP1 <= hitRadius) {
 				setDraggingControlPoint('cp1');
+				setLastDraggedControlPoint('cp1');
 			} else if (distanceToCP2 <= hitRadius) {
 				setDraggingControlPoint('cp2');
+				setLastDraggedControlPoint('cp2');
 			} else {
 				// Not clicking on any control point
 				setDraggingControlPoint(null);
@@ -148,22 +194,20 @@ function Canvas({ setBezierValues }) {
 		e.preventDefault();
 		// drag the grid
 		if (isDraggingGrid) {
-			const dx = e.clientX - gridDragStart.x;
-			const dy = e.clientY - gridDragStart.y;
+			//* enable for offset debugging
+			// console.log(`offsetX: ${offsetX.toFixed(2)}} offsetY: ${offsetY.toFixed(2)}`);
+			
+			// const dx = e.clientX - gridDragStart.x; // don't need to pan on x axis
+			const dy = (e.clientY - gridDragStart.y) * scrollSpeed;
 
-			let deltaX = offsetX + (dx / (cellSize * scale));
+			// let deltaX = offsetX + (dx / (cellSize * scale));
 			let deltaY = offsetY - (dy / (cellSize * scale));
 
-			// create out of bounds variables (out of bounds = Math.abs(offset) >= 14.5)
-			const maxOffset = 10;
-			const minOffset = -10;
-
-			deltaX = Math.max(minOffset, Math.min(deltaX, maxOffset));
-			deltaY = Math.max(minOffset, Math.min(deltaY, maxOffset));
+			// deltaX = Math.max(minMaxOffsetX.min, Math.min(deltaX, minMaxOffsetX.max)); // don't need to pan on x axis
+			deltaY = Math.max(minMaxOffsetY.min, Math.min(deltaY, minMaxOffsetY.max));
 			
-			setOffsetX(deltaX) // since x is flipped, add deltaX instead;
+			// setOffsetX(deltaX) // since x is flipped, add deltaX instead;
 			setOffsetY(deltaY);
-			
 			setGridDragStart({ x: e.clientX, y: e.clientY });
 		}
 		// drag the control points
@@ -173,14 +217,16 @@ function Canvas({ setBezierValues }) {
 			const gridPos = getGridPosition(e.clientX, e.clientY, canvasRect);
 
 			if (snapToGrid) {
-				gridPos.x = Math.round(gridPos.x * 10) / 10;
-				gridPos.y = Math.round(gridPos.y * 10) / 10;
+				gridPos.X = Math.round(gridPos.X * 10) / 10;
+				gridPos.Y = Math.round(gridPos.Y * 10) / 10;
 			}
 
+			const clampedX = Math.max(0, Math.min(gridPos.X, 1));
+
 			if (draggingControlPoint === 'cp1') {
-				setControlPoint1({ X: gridPos.x, Y: gridPos.y });
+				setControlPoint1({ X: clampedX, Y: gridPos.Y });
 			} else if (draggingControlPoint === 'cp2') {
-				setControlPoint2({ X: gridPos.x, Y: gridPos.y });
+				setControlPoint2({ X: clampedX, Y: gridPos.Y });
 			}
 		}
 	};	
@@ -200,24 +246,53 @@ function Canvas({ setBezierValues }) {
 			setIsDraggingGrid(false);
 		}
 	};
-	
-	// handle ctrl press to reset zoom
+
+
+	/* ----------------- handles the fit to screen button action ---------------- */
 	useEffect(() => {
-		const handleKeyDown = (e) => {
-			if (e.ctrlKey) {
+		if (!fitToScreenRef.current) {
+			fitToScreenRef.current = () => {
 				setScale(defaultScale);
 				setOffsetX(defaultOffset.x);
 				setOffsetY(defaultOffset.y);
-				setSnapToGrid(!snapToGrid);
-			}
+				// console.log('fit to screen');
+			};
+		}
+	}, [fitToScreenRef, defaultOffset]);
+
+
+	/* ----------------- check if current curve is already saved ---------------- */
+	const areBezierValuesEqual = (obj1, obj2, epsilon = 0.001) => {
+		const isEqual = (a, b) => Math.abs(a - b) < epsilon;
+	
+		return (
+			isEqual(obj1.cp1.X, obj2.cp1.X) &&
+			isEqual(obj1.cp1.Y, obj2.cp1.Y) &&
+			isEqual(obj1.cp2.X, obj2.cp2.X) &&
+			isEqual(obj1.cp2.Y, obj2.cp2.Y)
+		);
+	};
+	useEffect(() => {
+		const cp1X = Math.round(controlPoint1.X * 100) / 100;
+		const cp1Y = Math.round(controlPoint1.Y * 100) / 100;
+		const cp2X = Math.round(controlPoint2.X * 100) / 100;
+		const cp2Y = Math.round(controlPoint2.Y * 100) / 100;
+
+		const bezierValues = {
+			cp1: { X: cp1X, Y: cp1Y },
+			cp2: { X: cp2X, Y: cp2Y }
 		};
 
-		window.addEventListener('keydown', handleKeyDown);
+		const savedPreset = presetArray.find(obj => areBezierValuesEqual(obj.bezierValue, bezierValues));
+		console.log(savedPreset?.title);
 
-		return () => {
-			window.removeEventListener('keydown', handleKeyDown);
-		};
-	});
+		setIsSaved(savedPreset);
+		setSaveTooltip(savedPreset ? savedPreset.title : "Save");
+
+		// if (saveRef.current) {
+		// 	saveRef.current();
+		// }
+	}, [controlPoint1, controlPoint2, presetArray, setIsSaved]);
 
 
 	/* ---------------------- FINALLY SET THE BEZIER VALUES --------------------- */
@@ -232,6 +307,7 @@ function Canvas({ setBezierValues }) {
 			cp2: { X: cp2X, Y: cp2Y }
 		})
 	}, [controlPoint1, controlPoint2, setBezierValues]);
+
 
 
 	/* -------------------------------------------------------------------------- */

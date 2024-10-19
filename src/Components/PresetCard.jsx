@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from 'react';
+import { useId, useRef } from 'react';
 import '../Styles/presetCard.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import PropTypes from 'prop-types';
