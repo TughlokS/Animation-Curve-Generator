@@ -12,6 +12,7 @@ import { PropTypes } from 'prop-types';
 Canvas.propTypes = {
 	setBezierValues: PropTypes.func.isRequired,
 	snapToGrid: PropTypes.bool.isRequired,
+	snappingStepValue: PropTypes.number.isRequired,
 	fitToScreenRef: PropTypes.object.isRequired,
 	saveRef: PropTypes.object.isRequired,
 	setIsSaved: PropTypes.func.isRequired,
@@ -21,39 +22,14 @@ Canvas.propTypes = {
 
 function Canvas({ 
 	setBezierValues, 
-	snapToGrid, 
+	snapToGrid,
+	snappingStepValue,
 	fitToScreenRef, 
 	saveRef, 
 	setIsSaved,
 	setSaveTooltip,
 	presetArray
 }) {
-
-	/* ------------------- BEZIER VALUES CREATED BY THE CURVE ------------------- */
-	// const presetArray = [
-	// 	{
-	// 		title: 'Linear',
-	// 		bezierValue: {
-	// 		cp1: { X: 0, Y: 0 },
-	// 		cp2: { X: 1, Y: 1 },
-	// 		}
-	// 	},
-	// 	{
-	// 		title: 'Ease',
-	// 		bezierValue: {
-	// 		cp1: { X: 0.25, Y: 0.1 },
-	// 		cp2: { X: 0.25, Y: 1 },
-	// 		}
-	// 	},
-	// 	{
-	// 		title: 'Ease-In',
-	// 		bezierValue: {
-	// 		cp1: { X: 0.42, Y: 0 },
-	// 		cp2: { X: 1, Y: 1 },
-	// 		}
-	// 	}
-	// ];
-	/* ------------------- BEZIER VALUES CREATED BY THE CURVE ------------------- */
 
 	/* ----------------------- variables for canvas setup ----------------------- */
 	const canvasRef = useRef(null);
@@ -77,8 +53,8 @@ function Canvas({
 	const [gridDragStart, setGridDragStart] = useState({ x: 0, y: 0 });
 
 	// state variables for dragging controlPoints
-	const [controlPoint1, setControlPoint1] = useState({ X: 0.25, Y: 0.1 });
-	const [controlPoint2, setControlPoint2] = useState({ X: 0.25, Y: 1 });
+	const [controlPoint1, setControlPoint1] = useState({ X: 0, Y: 0 });
+	const [controlPoint2, setControlPoint2] = useState({ X: 1, Y: 1 });
 	const [draggingControlPoint, setDraggingControlPoint] = useState(null); // null, 'cp1', or 'cp2'
 	const [lastDraggedControlPoint, setLastDraggedControlPoint] = useState(null); // null, 'cp1', or 'cp2'
 	// const [snapToGrid, setSnapToGrid] = useState(false);
@@ -168,8 +144,6 @@ function Canvas({
 
 			const hitRadius = 10; // Same as the radius used when drawing the control points
 
-			// if ()
-
 			if (distanceToCP1 <= hitRadius) {
 				setDraggingControlPoint('cp1');
 				setLastDraggedControlPoint('cp1');
@@ -177,8 +151,27 @@ function Canvas({
 				setDraggingControlPoint('cp2');
 				setLastDraggedControlPoint('cp2');
 			} else {
-				// Not clicking on any control point
+				// if not near any control point, don't drag
 				setDraggingControlPoint(null);
+
+				// Click not near any control point
+				if (lastDraggedControlPoint === 'cp1' || lastDraggedControlPoint === 'cp2') {
+					// Convert canvas coordinates to grid coordinates
+					const gridPos = getGridPosition(clientX, clientY, canvasRect);
+	
+					if (snapToGrid) {
+						gridPos.X = Math.round(gridPos.X / snappingStepValue) * snappingStepValue;
+						gridPos.Y = Math.round(gridPos.Y / snappingStepValue) * snappingStepValue;
+					}
+
+					const clampedX = Math.max(0, Math.min(gridPos.X, 1));
+	
+					if (lastDraggedControlPoint === 'cp1') {
+						setControlPoint1({ X: clampedX, Y: gridPos.Y });
+					} else if (lastDraggedControlPoint === 'cp2') {
+						setControlPoint2({ X: clampedX, Y: gridPos.Y });
+					}
+				}
 			}
 		}
 
@@ -217,8 +210,8 @@ function Canvas({
 			const gridPos = getGridPosition(e.clientX, e.clientY, canvasRect);
 
 			if (snapToGrid) {
-				gridPos.X = Math.round(gridPos.X * 10) / 10;
-				gridPos.Y = Math.round(gridPos.Y * 10) / 10;
+				gridPos.X = Math.round(gridPos.X / snappingStepValue) * snappingStepValue;
+				gridPos.Y = Math.round(gridPos.Y / snappingStepValue) * snappingStepValue;
 			}
 
 			const clampedX = Math.max(0, Math.min(gridPos.X, 1));
@@ -284,7 +277,6 @@ function Canvas({
 		};
 
 		const savedPreset = presetArray.find(obj => areBezierValuesEqual(obj.bezierValue, bezierValues));
-		console.log(savedPreset?.title);
 
 		setIsSaved(savedPreset);
 		setSaveTooltip(savedPreset ? savedPreset.title : "Save");

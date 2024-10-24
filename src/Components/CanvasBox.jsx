@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 import '../Styles/canvasBox.css';
+import '../Styles/popupPrompt.css';
 import Canvas from './Canvas';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { PropTypes } from 'prop-types';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // import { scssColors } from '../Helpers/env';
 
 
@@ -17,14 +18,30 @@ CanvasBox.propTypes = {
 
 function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }) {
 
-    // state variables
-    // button state variables
+    // constants
+    const snappingSteps = [0.5, 0.25, 0.1, 0.05, 0.025, 0.01];
+    const defaultSnapStepIndex = snappingSteps.indexOf(0.1);
+
+
+    /* ----------------------------- state variables ---------------------------- */
+    // snap grid state variable
     const [snapToGrid, setSnapToGrid] = useState(false);
-    // const [fitToScreen, setFitToScreen] = useState(null);
+
+    // fit to screen state variables
     const fitToScreenRef = useRef(null);
+
+    // save state variables
     const saveRef = useRef(null);
+    const [isSavedPromptOpen, setIsSavePromptOpen] = useState(false);
+    const [isUnsavePromptOpen, setIsUnsavePromptOpen] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [saveTooltip, setSaveTooltip] = useState("Save");
+    const [presetTitle, setPresetTitle] = useState("New Preset");
+    const [currentPresetTitle, setCurrentPresetTitle] = useState("New Preset");
+
+    // settings state variables
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [stepIndex, setStepIndex] = useState(defaultSnapStepIndex);
 
 
     /* ------------------- Handle changes in the curve values ------------------- */
@@ -42,19 +59,86 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
 
 
     /* -------------- handle save button click if not already saved ------------- */
-    const createNewPreset = () => {
-        const newPreset = {
-            title: 'New Preset',
-            bezierValue: bezierValues
-        }
-        
-        setPresetArray(prevArray => [...prevArray, newPreset]);
-    };
-	const handleSaveClick = () => {
+    const handleSaveClick = () => {
         if (!isSaved) {
-            createNewPreset();
+            setIsSavePromptOpen(true);
+            setIsUnsavePromptOpen(false);
+        } else {
+            setIsSavePromptOpen(false);
+            setIsUnsavePromptOpen(true);
         }
+    };
+    const handleUnsavingPreset = () => {
+        setPresetArray(prevArray => prevArray.filter(preset => preset.title !== presetTitle));
+    }
+	const handleSavingPreset = () => {
+        if (presetTitle.trim() === '') {
+            alert('Please enter a preset name.');
+            return;
+        }
+
+        if (!isSaved) {
+            const newPreset = {
+                title: presetTitle,
+                bezierValue: bezierValues
+            }
+
+            setPresetArray(prevArray => [...prevArray, newPreset]);
+        }
+
+        // setPresetTitle('New Preset');
+        setIsSavePromptOpen(false);
 	};
+    const handleTitleChange = (e) => {
+        if (e.target.value.trim() === '') {
+            setPresetTitle('New Preset');
+        } else {
+            setPresetTitle(e.target.value);
+        }
+    }
+    const handleSavedModalClick = (e) => {
+        if (e.target.classList.contains('saved-modal-overlay')) {
+            setIsSavePromptOpen(false);
+        }
+    };
+    const handleUnsaveModalClick = (e) => {
+        if (e.target.classList.contains('unsaved-modal-overlay')) {
+            setIsUnsavePromptOpen(false);
+        }
+    };
+
+
+    /* -------------------- handle settings button and modal -------------------- */
+    const handleStepChange = (e) => {
+        const index = parseInt(e.target.value, 10);
+        setStepIndex(index);
+        // You can add additional logic here if needed
+    };
+    
+    const handleSettingsModalClick = (e) => {
+        if (e.target.classList.contains('settings-modal-overlay')) {
+            setIsSettingsOpen(false);
+        }
+    };
+
+
+    useEffect(() => {
+        const handleEsc = (event) => {
+            if (event.key === 'Escape') {
+                setIsSettingsOpen(false);
+                setIsSavePromptOpen(false);
+                setIsUnsavePromptOpen(false);
+            }
+        };
+        if (isSettingsOpen || isSavedPromptOpen || isUnsavePromptOpen) {
+            window.addEventListener('keydown', handleEsc);
+        } else {
+            window.removeEventListener('keydown', handleEsc);
+        }
+        return () => {
+            window.removeEventListener('keydown', handleEsc);
+        };
+    }, [isSettingsOpen, isSavedPromptOpen, isUnsavePromptOpen]);
 
 
 
@@ -109,7 +193,24 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                         onChange={(e) => handleCurveValueChange('cp2', 'Y', e.target.value)}
                         aria-label="Curve Value cp2Y"
                     />
+
+                    <div 
+                        className={`btn setting-btn ${isSettingsOpen ? 'active' : ''}`}
+                        data-tooltip-id="tooltip"
+                        data-tooltip-content="Snap settings"
+                        role='button'
+                        tabIndex={0}
+                        onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                    >
+
+                        <div 
+                            className={`icon-btn setting-btn-icon ${isSettingsOpen ? 'active' : ''}`}
+                        ></div>
+                    </div>
+
                 </div>
+
+                
 
                 <div 
 					className={`btn grid-btn ${snapToGrid ? 'active' : ''}`}
@@ -128,7 +229,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                 <div 
 					className="btn fit-btn" 
 					data-tooltip-id="tooltip" 
-					data-tooltip-content="Fit to Canvas"
+					data-tooltip-content="Default zoom and center"
                     role='button'
                     tabIndex={0}
                     onClick={() => {
@@ -168,11 +269,138 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
             <Canvas 
                 setBezierValues={setBezierValue} 
                 snapToGrid={snapToGrid}
+                snappingStepValue={snappingSteps[stepIndex]}
                 fitToScreenRef={fitToScreenRef}
                 saveRef={saveRef}
                 setIsSaved={setIsSaved}
                 setSaveTooltip={setSaveTooltip}
                 presetArray={presetArray}
+            />
+
+
+
+            {/* POPUP MODALS */}
+
+            {/* Modal for Settings */}
+            {
+                isSettingsOpen && (
+                <>
+                    <div className="settings-modal-overlay" onClick={handleSettingsModalClick}></div>
+                    <div className="settings-modal-content" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title" >
+                        <div className="settings-modal-body">
+                            <div 
+                                className="slider-container"
+                                data-tooltip-id="modal-tooltip" 
+                                data-tooltip-content="Grid snapping steps"
+                            >
+                                <input 
+                                    type="range"
+                                    id="snapStep"
+                                    min="0"
+                                    max={snappingSteps.length - 1}
+                                    step="1"
+                                    value={stepIndex}
+                                    onChange={handleStepChange}
+                                    className={`custom-slider ${snappingSteps[stepIndex] === snappingSteps[defaultSnapStepIndex] ? 'default-step' : ''}`}
+                                    aria-label="Snapping Steps Slider"
+                                />
+                                <div className="slider-labels">
+                                    <div className={`slider-label`}>
+                                        {snappingSteps[stepIndex]}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button 
+                                onClick={() => setIsSettingsOpen(false)}
+                                className="close-button"
+                            >
+                                Done
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {/* Modal for Save */}
+            {
+                isSavedPromptOpen && (
+                <>
+                    <div 
+                        className="saved-modal-overlay"
+                        onClick={handleSavedModalClick}
+                    ></div>
+                    <div 
+                        className="saved-modal-content"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="saved-modal-title"
+                    >
+                        <div className="saved-modal-body">
+                            <div 
+                                className="text-input-container"
+                                data-tooltip-id="modal-tooltip"
+                                data-tooltip-content="Enter a name for your preset"
+                            >
+                                <label htmlFor="preset-name">Title</label>
+                                <input 
+                                    type="text"
+                                    id="preset-name"
+                                    placeholder="New Preset"
+                                    className="title-input"
+                                    aria-label='Preset name'
+                                    onChange={(e) => handleTitleChange(e)}
+                                />
+                            </div>
+
+                            <button
+                                className="save-button"
+                                onClick={handleSavingPreset}
+                            >Save</button>
+                        </div>
+                    </div>
+                </>
+                )
+            }
+
+            {/* Modal for un-saving */}
+            {
+                isUnsavePromptOpen && (
+                    <>
+                        <div 
+                            className="unsave-modal-overlay"
+                            onClick={handleUnsaveModalClick}
+                        ></div>
+                        <div 
+                            className="unsave-modal-content"
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="unsave-modal-title"
+                        >
+                            <div className="unsave-modal-body">
+                                <label htmlFor="unsave-prompt">Are you sure you want to un-save {presetTitle} preset?</label>
+                                </div>
+                                <div className="buttons">
+                                    <button
+                                        className="unsave-button"
+                                        onClick={() => setIsUnsavePromptOpen(false)}
+                                        >No</button>
+                                    <button
+                                        className="cancel-button"
+                                        onClick={handleUnsavingPreset}
+                                    >Yes</button>
+                            </div>
+                        </div>
+                    </>
+                )
+            }
+
+            <ReactTooltip 
+                id="modal-tooltip" 
+                place="top" 
+                effect="solid" 
+                delayShow={100}
+                arrowColor="transparent"
             />
 
         </div>

@@ -4,6 +4,7 @@ import '../Styles/animationGroup.css'
 import MoveAnimationCard from './MoveAnimationCard'
 import { scssColors } from '../Helpers/env';
 import { PropTypes } from 'prop-types';
+import PopupSettingsPrompt from './PopupSettingsPrompt';
 
 
 
@@ -44,13 +45,14 @@ AnimationGroup.propTypes = {
 
 
 function AnimationGroup( { bezierValuesCurve, bezierValuesPreset, bezierValuesLinear } ) {
+	
 	const [animationSpeed, setAnimationSpeed] = useState(0.5);
 	const [nextAnimationDelay, setNextAnimationDelay] = useState(0.5);
 
-	const overshoot = {
-		cp1: { X: 0.5, Y: 0 },
-		cp2: { X: -0.25, Y: 1 },
-	};
+
+
+
+
 
 	return (
 		<div className="animation-group">
@@ -80,6 +82,9 @@ function AnimationGroup( { bezierValuesCurve, bezierValuesPreset, bezierValuesLi
 				animationSpeed={animationSpeed}
 				nextAnimationDelay={nextAnimationDelay}
 			/>
+
+			{/* test popupSettingsPrompt */}
+			
 
 		</div>
 	)

@@ -2,7 +2,7 @@
 /* --------------------------------- FONTS --------------------------------- */
 .canvas-box {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   padding: 25px;
@@ -43,14 +43,23 @@
   border-radius: 7px;
   background-color: #22262e;
   transition: all 0.2s ease-in-out;
+  /* Hover effect on the entire box */
+  /* Hover and focus effects on input elements */
   /* Hide spinners in Firefox */
 }
-.canvas-box .canvas-buttons .curve-value-box:hover, .canvas-box .canvas-buttons .curve-value-box:focus-within {
+.canvas-box .canvas-buttons .curve-value-box input {
+  transition: all 0.2s ease-in-out;
+}
+.canvas-box .canvas-buttons .curve-value-box:hover {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
   background-color: #ff1861;
 }
-.canvas-box .canvas-buttons .curve-value-box:hover .curve-values, .canvas-box .canvas-buttons .curve-value-box:focus-within .curve-values {
-  color: #fdfdfd;
+.canvas-box .canvas-buttons .curve-value-box:has(.btn:hover) {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
+  background-color: #22262e;
+}
+.canvas-box .canvas-buttons .curve-value-box:has(input:hover), .canvas-box .canvas-buttons .curve-value-box:has(input:focus) {
+  background-color: #ff1861;
 }
 .canvas-box .canvas-buttons .curve-value-box input[type=number]::-webkit-outer-spin-button,
 .canvas-box .canvas-buttons .curve-value-box input[type=number]::-webkit-inner-spin-button {
@@ -72,7 +81,6 @@
   padding: 5px;
   font-size: 16px;
   font-weight: bold;
-  transition: color 0.2s ease-in-out;
 }
 .canvas-box .canvas-buttons .curve-value-box .curve-values:nth-child(1), .canvas-box .canvas-buttons .curve-value-box .curve-values:nth-child(2), .canvas-box .canvas-buttons .curve-value-box .curve-values:nth-child(3) {
   border-right: 1px solid rgb(202, 202, 202);
@@ -92,14 +100,14 @@
 .canvas-box .canvas-buttons .btn.active:hover {
   background-color: #fdfdfd;
 }
-.canvas-box .canvas-buttons .btn.active:hover .grid-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .fit-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .save-btn-icon {
+.canvas-box .canvas-buttons .btn.active:hover .setting-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .grid-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .fit-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .save-btn-icon {
   background-color: #ff1861;
 }
 .canvas-box .canvas-buttons .btn:hover {
   background-color: #ff1861;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
 }
-.canvas-box .canvas-buttons .btn:hover .grid-btn-icon, .canvas-box .canvas-buttons .btn:hover .fit-btn-icon, .canvas-box .canvas-buttons .btn:hover .save-btn-icon {
+.canvas-box .canvas-buttons .btn:hover .setting-btn-icon, .canvas-box .canvas-buttons .btn:hover .grid-btn-icon, .canvas-box .canvas-buttons .btn:hover .fit-btn-icon, .canvas-box .canvas-buttons .btn:hover .save-btn-icon {
   background-color: #fdfdfd;
 }
 .canvas-box .canvas-buttons .icon-btn {
@@ -123,6 +131,16 @@
 }
 .canvas-box .canvas-buttons .icon-btn.active {
   background-color: #fdfdfd;
+}
+.canvas-box .canvas-buttons .setting-btn-icon {
+  -webkit-mask-image: url("./setting.svg");
+  mask-image: url("./setting.svg");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }
 .canvas-box .canvas-buttons .grid-btn-icon {
   -webkit-mask-image: url("./grid.svg");
@@ -158,4 +176,22 @@
 #tooltip {
   border-radius: 10px;
   background-color: #ff1861 !important;
+}
+
+#modal-tooltip {
+  z-index: 1001 !important;
+  border-radius: 7px !important;
+  background-color: #22262e !important;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35) !important;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translate(-50%, -60%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
 }/*# sourceMappingURL=canvasBox.css.map */

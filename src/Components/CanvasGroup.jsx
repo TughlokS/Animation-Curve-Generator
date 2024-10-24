@@ -99,7 +99,14 @@ function CanvasGroup({ bezierValues, setBezierValues, setBezierValuesPreset }) {
 				cp1: { X: 1, Y: 2 },
 				cp2: { X: 0, Y: -1 },
 			}
-		}
+		},
+		{
+			title: 'Bounce',
+			bezierValue: {
+				cp1: { X: 0.5, Y: 2.2 },
+				cp2: { X: 0, Y: 0 },
+			}
+		},
 	]);
 
 

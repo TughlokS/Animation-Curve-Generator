@@ -4,8 +4,8 @@
 .popup {
   position: fixed;
   /* width: 200px; Set a fixed width or make it dynamic as needed */
-  background-color: #fdfdfd;
-  color: #22262e;
+  background-color: #22262e;
+  color: #fdfdfd;
   padding: 10px 40px;
   border-radius: 10px;
   z-index: 1000;
