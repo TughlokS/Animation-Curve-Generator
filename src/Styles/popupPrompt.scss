@@ -33,6 +33,7 @@
 		// margin-bottom: 20px;
 		display: flex;
 		flex-direction: row;
+		height: 45px;
 		gap: 10px;
 
 		.slider-container {
@@ -41,7 +42,6 @@
 			align-items: center;
 			flex-direction: row;
 			gap: 10px;
-			width: 100%;
 			padding: 10px;
 			border: 2px solid transparent;
 			border-radius: 10px;				
@@ -133,7 +133,8 @@
 
 
 		.close-button {
-			padding: 0px 30px;
+			width: 100px;
+			// padding: 0px 30px;
 			outline: none;
 			border: none;
 			border-radius: 10px;
@@ -192,9 +193,9 @@
 
 
 	.saved-modal-body {
-		// margin-bottom: 20px;
 		display: flex;
 		flex-direction: row;
+		height: 45px;
 		gap: 10px;
 
 		.text-input-container {
@@ -203,7 +204,6 @@
 			align-items: center;
 			flex-direction: row;
 			gap: 10px;
-			width: 100%;
 			padding: 10px;
 			border: 2px solid transparent;
 			border-radius: 10px;
@@ -249,8 +249,7 @@
 
 
 		button {
-			// width: 100px;
-			padding: 5px 30px;
+			width: 100px;
 			outline: none;
 			border: none;
 			border-radius: 10px;
@@ -277,7 +276,81 @@
 /* -------------------------------------------------------------------------- */
 /*                                UN-SAVE MODAL                               */
 /* -------------------------------------------------------------------------- */
+.unsave-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	z-index: 1000;
+}
 
+.unsave-modal-content {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 450px;
+	max-width: 90%;
+	padding: 30px 45px;
+	border-radius: 15px;
+	background: $dark-primary-color;
+	box-shadow: 0 0px 30px rgba(0, 0, 0, 0.2);
+	z-index: 1001;
+	animation: slideDown 0.3s ease;
+
+
+	.unsave-modal-body {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		gap: 20px;
+
+		label {
+			text-align: center;
+			font-size: 18px;
+			color: $light-secondary-color;
+		}
+
+		.buttons {
+			display: flex;
+			justify-content: space-evenly;
+			align-items: center;
+			flex-direction: row;
+			gap: 10px;
+			width: 100%;
+			padding: 10px;
+
+			.unsave-button, .cancel-button {
+				width: 100px;
+				height: 45px;
+				color: $light-secondary-color;
+				font-size: 16px;
+				font-weight: bold;
+				border: none;
+				outline: none;
+				border-radius: 8px;
+				transition: all 0.3s ease;
+				
+				&:hover {
+					background-color: $light-secondary-color;
+					color: $dark-primary-color;
+				}
+			}
+
+			.unsave-button {
+				background-color: $accent-color-2;
+
+			}
+			
+			.cancel-button {
+				background-color: $accent-color-1;
+			}
+		}
+	}
+}
 /* -------------------------------------------------------------------------- */
 /*                                UN-SAVE MODAL                               */
 /* -------------------------------------------------------------------------- */

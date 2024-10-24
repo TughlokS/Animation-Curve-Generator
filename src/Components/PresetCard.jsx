@@ -19,13 +19,15 @@ PresetCard.propTypes = {
             Y: PropTypes.number.isRequired
         }).isRequired
     }).isRequired,
-    setBezierValuesPreset: PropTypes.func.isRequired
+    setBezierValuesPreset: PropTypes.func.isRequired,
+    setPresetTitle: PropTypes.func.isRequired
 }
 
 function PresetCard({ 
     title = "Preset Name", 
     bezierValue,
-    setBezierValuesPreset
+    setBezierValuesPreset,
+    setPresetTitle
 }) {
 
     const uniqueId = useId();
@@ -74,6 +76,7 @@ function PresetCard({
     /* -------------------------------------------------------------------------- */
     const handleCardClick = () => {
         setBezierValuesPreset(bezierValue);
+        setPresetTitle(title);
     };
     /* -------------------------------------------------------------------------- */
     /*                           HANDLES PASSING VALUES                           */

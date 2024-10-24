@@ -15,6 +15,7 @@ function App() {
 		cp1: { X: 0, Y: 0 },
 		cp2: { X: 1, Y: 1 },
 	});
+	const [presetTitle, setPresetTitle] = useState('Preset');
 
 	const bezierValuesLinear = {
 		cp1: { X: 0, Y: 0 },
@@ -30,11 +31,13 @@ function App() {
 					bezierValues={bezierValues} 
 					setBezierValues={setBezierValues} 
 					setBezierValuesPreset={setBezierValuesPreset}
+					setPresetTitle={setPresetTitle}
 				/>
 
 				<AnimationGroup 
 					bezierValuesCurve={bezierValues}
-					bezierValuesPreset={bezierValuesPreset} 
+					bezierValuesPreset={bezierValuesPreset}
+					presetTitle={presetTitle}
 					bezierValuesLinear={bezierValuesLinear}
 				/>
 

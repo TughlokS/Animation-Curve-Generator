@@ -5,6 +5,7 @@ import MoveAnimationCard from './MoveAnimationCard'
 import { scssColors } from '../Helpers/env';
 import { PropTypes } from 'prop-types';
 import PopupSettingsPrompt from './PopupSettingsPrompt';
+import { areBezierValuesEqual } from '../Helpers/compareValues';
 
 
 
@@ -31,6 +32,8 @@ AnimationGroup.propTypes = {
 		}).isRequired
 	}).isRequired,
 
+	presetTitle: PropTypes.string.isRequired,
+
 	bezierValuesLinear: PropTypes.shape({
 		cp1: PropTypes.shape({
 			X: PropTypes.number.isRequired,
@@ -44,12 +47,13 @@ AnimationGroup.propTypes = {
 };
 
 
-function AnimationGroup( { bezierValuesCurve, bezierValuesPreset, bezierValuesLinear } ) {
+function AnimationGroup( { bezierValuesCurve, bezierValuesPreset, presetTitle, bezierValuesLinear } ) {
 	
 	const [animationSpeed, setAnimationSpeed] = useState(0.5);
 	const [nextAnimationDelay, setNextAnimationDelay] = useState(0.5);
-
-
+	
+	const curveTitle = !areBezierValuesEqual(bezierValuesCurve, bezierValuesLinear) ? !areBezierValuesEqual(bezierValuesCurve, bezierValuesPreset) ? 'Curve' : presetTitle : 'Linear';
+	const dynamicPresetTitle = areBezierValuesEqual(bezierValuesPreset, bezierValuesLinear) ? 'Linear' : presetTitle;
 
 
 
@@ -62,14 +66,14 @@ function AnimationGroup( { bezierValuesCurve, bezierValuesPreset, bezierValuesLi
 			</div>
 
 			<MoveAnimationCard
-				title='Curve' 
+				title={curveTitle}
 				bezierValues={bezierValuesCurve} 
 				backgroundColor={scssColors.accent_red}
 				animationSpeed={animationSpeed}
 				nextAnimationDelay={nextAnimationDelay}
 			/>
 			<MoveAnimationCard
-				title='Preset' 
+				title={dynamicPresetTitle} 
 				bezierValues={bezierValuesPreset}
 				backgroundColor={scssColors.accent_blue}
 				animationSpeed={animationSpeed}

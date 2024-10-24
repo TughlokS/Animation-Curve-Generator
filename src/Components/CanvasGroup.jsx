@@ -4,108 +4,149 @@ import PresetCardContainer from './PresetCardContainer';
 import CanvasBox from './CanvasBox';
 import { PropTypes } from 'prop-types'
 import { useState } from 'react';
+import {v4 as uuidv4} from 'uuid';
 
 
 
 CanvasGroup.propTypes = {
 	bezierValues: PropTypes.object.isRequired,
 	setBezierValues: PropTypes.func.isRequired,
-	setBezierValuesPreset: PropTypes.func.isRequired
+	setBezierValuesPreset: PropTypes.func.isRequired,
+	setPresetTitle: PropTypes.func.isRequired
 };
 
-function CanvasGroup({ bezierValues, setBezierValues, setBezierValuesPreset }) {
+function CanvasGroup({ bezierValues, setBezierValues, setBezierValuesPreset, setPresetTitle }) {
 
 	const [presetArray, setPresetArray] = useState([ 
 		{
+			id: uuidv4(),
 			title: 'Linear',
 			bezierValue: {
 				cp1: { X: 0, Y: 0 },
 				cp2: { X: 1, Y: 1 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Ease',
 			bezierValue: {
 				cp1: { X: 0.25, Y: 0.1 },
 				cp2: { X: 0.25, Y: 1 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Ease-In',
 			bezierValue: {
 				cp1: { X: 0.42, Y: 0 },
 				cp2: { X: 1, Y: 1 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Ease-Out',
 			bezierValue: {
 				cp1: { X: 0, Y: 0 },
 				cp2: { X: 0.58, Y: 1 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Ease-In-Out',
 			bezierValue: {
 				cp1: { X: 0.42, Y: 0 },
 				cp2: { X: 0.58, Y: 1 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Bounce-In',
 			bezierValue: {
 				cp1: { X: 0.5, Y: -0.5 },
 				cp2: { X: 1, Y: 1 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Bounce-Out',
 			bezierValue: {
 				cp1: { X: 0, Y: 0 },
 				cp2: { X: 0.5, Y: 1.5 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Bounce-In-Out',
 			bezierValue: {
 				cp1: { X: 0.5, Y: -0.5 },
 				cp2: { X: 0.5, Y: 1.5 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Anticipate',
 			bezierValue: {
 				cp1: { X: 1, Y: 0 },
 				cp2: { X: 0, Y: 1 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Overshoot',
 			bezierValue: {
 				cp1: { X: 0, Y: 1 },
 				cp2: { X: 0, Y: 1 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Lightning',
 			bezierValue: {
 				cp1: { X: 1, Y: 0 },
 				cp2: { X: 0, Y: 1 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Glitch',
 			bezierValue: {
 				cp1: { X: 1, Y: 2 },
 				cp2: { X: 0, Y: -1 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 		{
+			id: uuidv4(),
 			title: 'Bounce',
 			bezierValue: {
 				cp1: { X: 0.5, Y: 2.2 },
 				cp2: { X: 0, Y: 0 },
-			}
+			},
+			isFavorite: false,
+			isLocked: true,
 		},
 	]);
 
@@ -125,6 +166,7 @@ function CanvasGroup({ bezierValues, setBezierValues, setBezierValuesPreset }) {
 
 			<PresetCardContainer 
 				setBezierValuesPreset={setBezierValuesPreset} 
+				setPresetTitle={setPresetTitle}
 				presetArray={presetArray}
 			/>
 

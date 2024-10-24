@@ -5,6 +5,8 @@ import Canvas from './Canvas';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { PropTypes } from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { areBezierValuesEqual } from '../Helpers/compareValues';
 // import { scssColors } from '../Helpers/env';
 
 
@@ -32,12 +34,12 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
 
     // save state variables
     const saveRef = useRef(null);
+    const matchingPreset = presetArray.find((preset) => areBezierValuesEqual(preset.bezierValue, bezierValues));
     const [isSavedPromptOpen, setIsSavePromptOpen] = useState(false);
     const [isUnsavePromptOpen, setIsUnsavePromptOpen] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [saveTooltip, setSaveTooltip] = useState("Save");
-    const [presetTitle, setPresetTitle] = useState("New Preset");
-    const [currentPresetTitle, setCurrentPresetTitle] = useState("New Preset");
+    const [presetTitle, setPresetTitle] = useState('');
 
     // settings state variables
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -64,38 +66,41 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
             setIsSavePromptOpen(true);
             setIsUnsavePromptOpen(false);
         } else {
+            if (matchingPreset && matchingPreset.isLocked) return;
+            
             setIsSavePromptOpen(false);
             setIsUnsavePromptOpen(true);
         }
     };
     const handleUnsavingPreset = () => {
-        setPresetArray(prevArray => prevArray.filter(preset => preset.title !== presetTitle));
-    }
+
+        setPresetArray((prevArray) => {
+            return prevArray.filter((preset) => {
+                // Keep presets that do NOT match the current bezierValues
+                return !areBezierValuesEqual(preset.bezierValue, bezierValues);
+            });
+        });
+
+        setIsUnsavePromptOpen(false);
+    };    
 	const handleSavingPreset = () => {
-        if (presetTitle.trim() === '') {
-            alert('Please enter a preset name.');
-            return;
-        }
+        const title = presetTitle.trim() || 'New Preset';
 
         if (!isSaved) {
             const newPreset = {
-                title: presetTitle,
-                bezierValue: bezierValues
-            }
+                id: uuidv4(),
+                title: title,
+                bezierValue: bezierValues,
+                isFavorite: false,
+                isLocked: false
+            };
 
             setPresetArray(prevArray => [...prevArray, newPreset]);
         }
 
-        // setPresetTitle('New Preset');
+        setPresetTitle('');
         setIsSavePromptOpen(false);
 	};
-    const handleTitleChange = (e) => {
-        if (e.target.value.trim() === '') {
-            setPresetTitle('New Preset');
-        } else {
-            setPresetTitle(e.target.value);
-        }
-    }
     const handleSavedModalClick = (e) => {
         if (e.target.classList.contains('saved-modal-overlay')) {
             setIsSavePromptOpen(false);
@@ -349,7 +354,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                                     placeholder="New Preset"
                                     className="title-input"
                                     aria-label='Preset name'
-                                    onChange={(e) => handleTitleChange(e)}
+                                    onChange={(e) => setPresetTitle(e.target.value)}
                                 />
                             </div>
 
@@ -378,17 +383,24 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                             aria-labelledby="unsave-modal-title"
                         >
                             <div className="unsave-modal-body">
-                                <label htmlFor="unsave-prompt">Are you sure you want to un-save {presetTitle} preset?</label>
-                                </div>
+                                <label htmlFor="unsave-prompt">
+                                    Delete this preset?
+                                </label>
                                 <div className="buttons">
                                     <button
                                         className="unsave-button"
                                         onClick={() => setIsUnsavePromptOpen(false)}
-                                        >No</button>
+                                    >
+                                        No
+                                    </button>
+
                                     <button
                                         className="cancel-button"
                                         onClick={handleUnsavingPreset}
-                                    >Yes</button>
+                                    >
+                                        Yes
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </>
