@@ -10,6 +10,8 @@ import { areBezierValuesEqual } from '../Helpers/compareValues';
 
 
 AnimationGroup.propTypes = {
+	presetArray: PropTypes.array.isRequired,
+
     bezierValuesCurve: PropTypes.shape({
         cp1: PropTypes.shape({
             X: PropTypes.number.isRequired,
@@ -47,12 +49,16 @@ AnimationGroup.propTypes = {
 };
 
 
-function AnimationGroup( { bezierValuesCurve, bezierValuesPreset, presetTitle, bezierValuesLinear } ) {
+function AnimationGroup( { presetArray, bezierValuesCurve, bezierValuesPreset, presetTitle, bezierValuesLinear } ) {
 	
 	const [animationSpeed, setAnimationSpeed] = useState(0.5);
 	const [nextAnimationDelay, setNextAnimationDelay] = useState(0.5);
+
+	const savedPreset = presetArray.find(obj => areBezierValuesEqual(obj.bezierValue, bezierValuesCurve));
 	
-	const curveTitle = !areBezierValuesEqual(bezierValuesCurve, bezierValuesLinear) ? !areBezierValuesEqual(bezierValuesCurve, bezierValuesPreset) ? 'Curve' : presetTitle : 'Linear';
+	// const curveTitle = !areBezierValuesEqual(bezierValuesCurve, bezierValuesLinear) ? !areBezierValuesEqual(bezierValuesCurve, bezierValuesPreset) ? 'Curve' : presetTitle : 'Linear';
+	const curveTitle = savedPreset ? `Curve | ${savedPreset.title}` : 'Curve';
+
 	const dynamicPresetTitle = areBezierValuesEqual(bezierValuesPreset, bezierValuesLinear) ? 'Linear' : presetTitle;
 
 

@@ -319,9 +319,142 @@
 /* -------------------------------------------------------------------------- */
 /*                                UN-SAVE MODAL                               */
 /* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                            CONTROL-VALUES MODAL                            */
+/* -------------------------------------------------------------------------- */
+.control-values-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+.control-values-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 450px;
+  max-width: 90%;
+  padding: 30px 45px;
+  border-radius: 15px;
+  background: #22262e;
+  box-shadow: 0 0px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  animation: slideDown 0.3s ease;
+}
+.control-values-content .control-values-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 2px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-color: #22262e;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+.control-values-content .control-values-body ::-moz-placeholder {
+  -moz-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+.control-values-content .control-values-body ::placeholder {
+  transition: all 0.2s ease;
+}
+.control-values-content .control-values-body.cp1:hover, .control-values-content .control-values-body.cp1:has(:focus-within) {
+  background-color: #ff1861;
+}
+.control-values-content .control-values-body.cp1:hover ::-moz-placeholder, .control-values-content .control-values-body.cp1:has(:focus-within) ::-moz-placeholder {
+  color: rgba(105, 0, 33, 0.6431372549);
+}
+.control-values-content .control-values-body.cp1:hover ::placeholder, .control-values-content .control-values-body.cp1:has(:focus-within) ::placeholder {
+  color: rgba(105, 0, 33, 0.6431372549);
+}
+.control-values-content .control-values-body.cp2:hover, .control-values-content .control-values-body.cp2:has(:focus-within) {
+  background-color: #00e1ff;
+}
+.control-values-content .control-values-body.cp2:hover ::-moz-placeholder, .control-values-content .control-values-body.cp2:has(:focus-within) ::-moz-placeholder {
+  color: rgba(0, 109, 124, 0.5803921569);
+}
+.control-values-content .control-values-body.cp2:hover ::placeholder, .control-values-content .control-values-body.cp2:has(:focus-within) ::placeholder {
+  color: rgba(0, 109, 124, 0.5803921569);
+}
+.control-values-content .control-values-body input {
+  text-align: center;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: #fdfdfd;
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+.control-values-content .control-values-body input.first-box {
+  border-right: 1px solid #fdfdfd;
+}
+.control-values-content .footer {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 20px;
+}
+.control-values-content .footer button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  outline: none;
+  color: #fdfdfd;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+.control-values-content .footer button:hover {
+  color: #22262e;
+}
+.control-values-content .footer button.cp1 {
+  background-color: #ff1861;
+}
+.control-values-content .footer button.cp1:hover {
+  background-color: #fdfdfd;
+}
+.control-values-content .footer button.cp2 {
+  background-color: #00e1ff;
+}
+.control-values-content .footer button.cp2:hover {
+  background-color: #fdfdfd;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                            CONTROL-VALUES MODAL                            */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                                 INFO MODAL                                 */
+/* -------------------------------------------------------------------------- */
+.info-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 INFO MODAL                                 */
+/* -------------------------------------------------------------------------- */
 @keyframes slideDown {
   from {
-    transform: translate(-50%, -60%);
+    transform: translate(-50%, -70%);
     opacity: 0;
   }
   to {

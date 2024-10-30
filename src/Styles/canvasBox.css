@@ -58,7 +58,7 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
   background-color: #22262e;
 }
-.canvas-box .canvas-buttons .curve-value-box:has(input:hover), .canvas-box .canvas-buttons .curve-value-box:has(input:focus) {
+.canvas-box .canvas-buttons .curve-value-box:has(input:hover) {
   background-color: #ff1861;
 }
 .canvas-box .canvas-buttons .curve-value-box input[type=number]::-webkit-outer-spin-button,
@@ -100,14 +100,14 @@
 .canvas-box .canvas-buttons .btn.active:hover {
   background-color: #fdfdfd;
 }
-.canvas-box .canvas-buttons .btn.active:hover .setting-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .grid-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .fit-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .save-btn-icon {
+.canvas-box .canvas-buttons .btn.active:hover .setting-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .grid-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .fit-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .save-btn-icon, .canvas-box .canvas-buttons .btn.active:hover .info-btn-icon {
   background-color: #ff1861;
 }
 .canvas-box .canvas-buttons .btn:hover {
   background-color: #ff1861;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
 }
-.canvas-box .canvas-buttons .btn:hover .setting-btn-icon, .canvas-box .canvas-buttons .btn:hover .grid-btn-icon, .canvas-box .canvas-buttons .btn:hover .fit-btn-icon, .canvas-box .canvas-buttons .btn:hover .save-btn-icon {
+.canvas-box .canvas-buttons .btn:hover .setting-btn-icon, .canvas-box .canvas-buttons .btn:hover .grid-btn-icon, .canvas-box .canvas-buttons .btn:hover .fit-btn-icon, .canvas-box .canvas-buttons .btn:hover .save-btn-icon, .canvas-box .canvas-buttons .btn:hover .info-btn-icon {
   background-color: #fdfdfd;
 }
 .canvas-box .canvas-buttons .icon-btn {
@@ -165,6 +165,16 @@
 .canvas-box .canvas-buttons .save-btn-icon {
   -webkit-mask-image: url("/save.svg");
   mask-image: url("/save.svg");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+.canvas-box .canvas-buttons .info-btn-icon {
+  -webkit-mask-image: url("./info.svg");
+  mask-image: url("./info.svg");
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-position: center;

@@ -7,7 +7,10 @@ import { PropTypes } from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { areBezierValuesEqual } from '../Helpers/compareValues';
-// import { scssColors } from '../Helpers/env';
+import { 
+    bezierValuesBoxReadOnly, 
+    defaultGridSnappingStep 
+} from '../Helpers/env';
 
 
 
@@ -22,7 +25,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
 
     // constants
     const snappingSteps = [0.5, 0.25, 0.1, 0.05, 0.025, 0.01];
-    const defaultSnapStepIndex = snappingSteps.indexOf(0.1);
+    const defaultSnapStepIndex = snappingSteps.indexOf(defaultGridSnappingStep);
 
 
     /* ----------------------------- state variables ---------------------------- */
@@ -45,6 +48,9 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [stepIndex, setStepIndex] = useState(defaultSnapStepIndex);
 
+    // information state variables
+    const [isInfoOpen, setIsInfoOpen] = useState(false);
+
 
     /* ------------------- Handle changes in the curve values ------------------- */
     const handleCurveValueChange = (controlPoint, axis, value) => {
@@ -58,6 +64,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
             }
         }));
     };
+
 
 
     /* -------------- handle save button click if not already saved ------------- */
@@ -113,6 +120,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
     };
 
 
+
     /* -------------------- handle settings button and modal -------------------- */
     const handleStepChange = (e) => {
         const index = parseInt(e.target.value, 10);
@@ -125,6 +133,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
             setIsSettingsOpen(false);
         }
     };
+
 
 
     useEffect(() => {
@@ -161,6 +170,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                         min={-9}
                         max={9}
                         step={0.05}
+                        readOnly={bezierValuesBoxReadOnly}
                         value={bezierValues.cp1.X}
                         onChange={(e) => handleCurveValueChange('cp1', 'X', e.target.value)}
                         aria-label="Curve Value cp1X"
@@ -172,6 +182,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                         min={-9}
                         max={9}
                         step={0.05}
+                        readOnly={bezierValuesBoxReadOnly}
                         value={bezierValues.cp1.Y}
                         onChange={(e) => handleCurveValueChange('cp1', 'Y', e.target.value)}
                         aria-label="Curve Value cp1Y"
@@ -183,6 +194,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                         min={-9}
                         max={9}
                         step={0.05}
+                        readOnly={bezierValuesBoxReadOnly}
                         value={bezierValues.cp2.X}
                         onChange={(e) => handleCurveValueChange('cp2', 'X', e.target.value)}
                         aria-label="Curve Value cp2X"
@@ -194,6 +206,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                         min={-9}
                         max={9}
                         step={0.05}
+                        readOnly={bezierValuesBoxReadOnly}
                         value={bezierValues.cp2.Y}
                         onChange={(e) => handleCurveValueChange('cp2', 'Y', e.target.value)}
                         aria-label="Curve Value cp2Y"
@@ -215,7 +228,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
 
                 </div>
 
-                
+
 
                 <div 
 					className={`btn grid-btn ${snapToGrid ? 'active' : ''}`}
@@ -225,11 +238,11 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                     tabIndex={0}
                     onClick={() => setSnapToGrid(!snapToGrid)}
                 >
-
                     <div 
                         className={`icon-btn grid-btn-icon ${snapToGrid ? 'active' : ''}`}
                     ></div>
 				</div>
+
 
                 <div 
 					className="btn fit-btn" 
@@ -243,9 +256,9 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                         }
                     }}
                 >
-
                     <div className="icon-btn fit-btn-icon"></div>
 				</div>
+
 
                 <div 
 					className={`btn save-btn ${isSaved ? 'active' : ''}`}
@@ -255,11 +268,25 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                     tabIndex={0}
                     onClick={handleSaveClick}
                 >
-
                     <div 
                         className={`icon-btn save-btn-icon ${isSaved ? 'active' : ''}`}
                     ></div>
 				</div>
+
+
+                <div
+                    className={`btn info-btn ${isInfoOpen ? 'active' : ''}`}
+                    data-tooltip-id="tooltip"
+                    data-tooltip-content="Information"
+                    role='button'
+                    tabIndex={0}
+                    onClick={() => setIsInfoOpen(true)}
+                >
+                    <div 
+                        className={`icon-btn info-btn-icon ${isInfoOpen ? 'active' : ''}`}
+                    ></div>
+                </div>
+
 
                 <ReactTooltip 
                     id="tooltip" 
@@ -350,6 +377,7 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                                 <label htmlFor="preset-name">Title</label>
                                 <input 
                                     type="text"
+                                    autoFocus={true}
                                     id="preset-name"
                                     placeholder="New Preset"
                                     className="title-input"
@@ -403,6 +431,18 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
                                 </div>
                             </div>
                         </div>
+                    </>
+                )
+            }
+
+            {/* Modal for Info */}
+            {
+                isInfoOpen && (
+                    <>
+                        <div
+                            className='info-modal-overlay'
+                            onClick={() => setIsInfoOpen(false)}
+                        ></div>
                     </>
                 )
             }

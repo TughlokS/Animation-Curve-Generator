@@ -31,3 +31,18 @@ export const bezierCurveColors = {
 	
 	grabControlPointColor_light: 'rgba(45, 49, 57, 1)'
 };
+
+
+/* -------------------------------------------------------------------------- */
+/*                             CANVAS BOX DEFAULTS                            */
+/* -------------------------------------------------------------------------- */
+
+// are the values of canvas readOnly? (non editable)
+export const bezierValuesBoxReadOnly = true;
+
+// the default step of the grid snapping
+export const defaultGridSnappingStep = 0.1;
+
+/* -------------------------------------------------------------------------- */
+/*                             CANVAS BOX DEFAULTS                            */
+/* -------------------------------------------------------------------------- */

@@ -357,9 +357,156 @@
 
 
 
+/* -------------------------------------------------------------------------- */
+/*                            CONTROL-VALUES MODAL                            */
+/* -------------------------------------------------------------------------- */
+.control-values-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	z-index: 1000;
+}
+
+.control-values-content {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 450px;
+	max-width: 90%;
+	padding: 30px 45px;
+	border-radius: 15px;
+	background: $dark-primary-color;
+	box-shadow: 0 0px 30px rgba(0, 0, 0, 0.2);
+	z-index: 1001;
+	animation: slideDown 0.3s ease;
+
+
+	.control-values-body {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+		align-items: center;
+		gap: 2px;
+		border-radius: 10px;
+		border: 2px solid transparent;
+		background-color: $dark-primary-color;
+		box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+		transition: all 0.2s ease;
+		
+		::placeholder {
+			transition: all 0.2s ease;
+		}
+
+		&.cp1 {
+			&:hover, &:has(:focus-within) {
+				background-color: $accent-color-1;
+
+				::placeholder {
+					color: #690021a4;
+				}
+			}
+		}
+
+		&.cp2 {
+			&:hover, &:has(:focus-within) {
+				background-color: $accent-color-2;
+
+				::placeholder {
+					color: #006d7c94;
+				}
+			}
+		}
+
+		input {
+			text-align: center;
+			border: none;
+			outline: none;
+			background-color: transparent;
+			color: $light-secondary-color;
+			width: 100%;
+			height: 50px;
+			padding: 5px;
+			font-size: 16px;
+			font-weight: bold;
+			transition: all 0.2s ease-in-out;
+
+			&.first-box {
+				border-right: 1px solid $light-secondary-color;
+			}
+		}
+	}
+
+	.footer {
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+		flex-direction: row;
+		margin-top: 20px;
+
+		button {
+			width: 100%;
+			padding: 10px;
+			border: none;
+			outline: none;
+			color: $light-secondary-color;
+			font-size: 16px;
+			font-weight: bold;
+			border-radius: 10px;
+			transition: all 0.2s ease;
+
+			&:hover {
+				color: $dark-primary-color;
+			}
+
+			&.cp1 {
+				background-color: $accent-color-1;
+				
+				&:hover {
+					background-color: $light-secondary-color;
+				}
+			}
+
+			&.cp2 {
+				background-color: $accent-color-2;
+				
+				&:hover {
+					background-color: $light-secondary-color;
+				}
+			}
+		}
+	}
+}
+/* -------------------------------------------------------------------------- */
+/*                            CONTROL-VALUES MODAL                            */
+/* -------------------------------------------------------------------------- */
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 INFO MODAL                                 */
+/* -------------------------------------------------------------------------- */
+.info-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	z-index: 1000;
+}
+/* -------------------------------------------------------------------------- */
+/*                                 INFO MODAL                                 */
+/* -------------------------------------------------------------------------- */
+
+
+
 @keyframes slideDown {
 	from {
-		transform: translate(-50%, -60%);
+		transform: translate(-50%, -70%);
 		opacity: 0;
 	}
 	to {

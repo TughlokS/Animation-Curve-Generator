@@ -2,6 +2,11 @@
 /* eslint-disable no-unused-vars */
 import { drawGrid, getCanvasPosition, getGridPosition } from '../Helpers/drawGrid';
 import { drawCurve } from '../Helpers/drawCurve';
+import {
+    getMousePositionOnCanvas,
+    getControlPointUnderCursor,
+} from '../Helpers/calculateValues';
+
 import '../Styles/canvasBox.css'
 import { useRef, useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
@@ -119,53 +124,132 @@ function Canvas({
 			setScale((prevScale) => prevScale / 1.1);
 		}
 	}
-	
+
+
+
+	/* ----------------- handle double click to open popupPrompt ---------------- */
+	const [isControlPointEditorOpen, setControlPointEditorOpen] = useState(false);
+	const [controlPointValueChanger, setControlPointValueChanger] = useState({ X: 0, Y: 0 });
+	// opens the control point editor menu
+	const handleDoubleClick = (e) => {
+		e.preventDefault();
+
+		if (lastDraggedControlPoint) {
+			setControlPointEditorOpen(true);
+		}
+	}
+
+	// handles showing the display value of the control point
+	const displayControlPointValue = () => {
+		const displayValues = {
+			X: 0,
+			Y: 0,
+		};
+
+		if (lastDraggedControlPoint) {
+			if (lastDraggedControlPoint === 'cp1') {
+				displayValues.X = controlPoint1.X.toFixed(2);
+				displayValues.Y = controlPoint1.Y.toFixed(2);
+			}
+			else if (lastDraggedControlPoint === 'cp2') {
+				displayValues.X = controlPoint2.X.toFixed(2);
+				displayValues.Y = controlPoint2.Y.toFixed(2);
+			}
+		}
+
+		return displayValues;
+	}
+
+	// handles relating control point when it is done manually through prompt menu
+	const handleRelocatingControlPoint = () => {
+		const xInput = document.getElementById('x-value');
+		const yInput = document.getElementById('y-value');
+
+		let xValue = xInput.value.trim();
+		let yValue = yInput.value.trim();
+
+		const currentValues = displayControlPointValue();
+
+		// if both boxes are empty then close the editor
+		if (xValue === '' && yValue === '') {
+			setControlPointEditorOpen(false);
+			return;
+		}
+
+		let x = xValue !== '' ? parseFloat(xValue) : parseFloat(currentValues.X);
+		let y = yValue !== '' ? parseFloat(yValue) : parseFloat(currentValues.Y);
+
+		if (isNaN(x)) x = parseFloat(currentValues.X);
+		if (isNaN(y)) y = parseFloat(currentValues.Y);
+
+		// make sure x is not greater than 1 or less than 0
+		x = Math.max(0, Math.min(1, x));
+
+		// round to 2 decimal places
+		x = parseFloat(x.toFixed(2));
+		y = parseFloat(y.toFixed(2));
+
+		if (lastDraggedControlPoint === 'cp1') {
+			setControlPoint1({ X: x, Y: y });
+		}
+		else if (lastDraggedControlPoint === 'cp2') {
+			setControlPoint2({ X: x, Y: y });
+		}
+
+		setControlPointEditorOpen(false);
+	}
+
+
+
 	/* ---------------- use mouse buttons to drag items in canvas --------------- */
 	const handleMouseDown = (e) => {
 		e.preventDefault();
 
-		// left mouse button held down initiates grid dragging > store mouse pos
 		const { clientX, clientY } = e;
-
-		// left mouse button held down initiates control point dragging
+		
+		// left mouse button held down initiates grid dragging > store mouse pos
 		if (e.button === 0) {
-			const canvasRect = canvasRef.current.getBoundingClientRect();
-			const canvasX = clientX - canvasRect.left;
-			const canvasY = clientY - canvasRect.top;
+			// put all the parameters in a single object for ease of use
+			const canvasParameters = {
+				canvasSize,
+				scale,
+				offsetX,
+				offsetY,
+				cellSize,
+			};
 
-			// Get canvas positions of control points
-			const cp1CanvasPos = getCanvasPosition(controlPoint1.X, controlPoint1.Y);
-			const cp2CanvasPos = getCanvasPosition(controlPoint2.X, controlPoint2.Y);
+			// put control points in a single object for ease of use
+			const controlPoints = {
+				cp1: controlPoint1,
+				cp2: controlPoint2,
+			};
 
-			// Check if the click is near control point 1
-			const distanceToCP1 = Math.hypot(canvasX - cp1CanvasPos.X, canvasY - cp1CanvasPos.Y);
-			// Check if the click is near control point 2
-			const distanceToCP2 = Math.hypot(canvasX - cp2CanvasPos.X, canvasY - cp2CanvasPos.Y);
+			// get mouse position on canvas
+			const { x: mouseX, y: mouseY } = getMousePositionOnCanvas(e, canvasRef);
 
-			const hitRadius = 10; // Same as the radius used when drawing the control points
+			const hitControlPoint = getControlPointUnderCursor(mouseX, mouseY, controlPoints, canvasParameters, 10);
 
-			if (distanceToCP1 <= hitRadius) {
-				setDraggingControlPoint('cp1');
-				setLastDraggedControlPoint('cp1');
-			} else if (distanceToCP2 <= hitRadius) {
-				setDraggingControlPoint('cp2');
-				setLastDraggedControlPoint('cp2');
+			if (hitControlPoint) {
+				setDraggingControlPoint(hitControlPoint);
+				setLastDraggedControlPoint(hitControlPoint);
 			} else {
-				// if not near any control point, don't drag
 				setDraggingControlPoint(null);
 
 				// Click not near any control point
 				if (lastDraggedControlPoint === 'cp1' || lastDraggedControlPoint === 'cp2') {
+					
+					const canvasRect = canvasRef.current.getBoundingClientRect();
+					
 					// Convert canvas coordinates to grid coordinates
 					const gridPos = getGridPosition(clientX, clientY, canvasRect);
-	
+
 					if (snapToGrid) {
 						gridPos.X = Math.round(gridPos.X / snappingStepValue) * snappingStepValue;
 						gridPos.Y = Math.round(gridPos.Y / snappingStepValue) * snappingStepValue;
 					}
 
 					const clampedX = Math.max(0, Math.min(gridPos.X, 1));
-	
+
 					if (lastDraggedControlPoint === 'cp1') {
 						setControlPoint1({ X: clampedX, Y: gridPos.Y });
 					} else if (lastDraggedControlPoint === 'cp2') {
@@ -173,6 +257,8 @@ function Canvas({
 					}
 				}
 			}
+
+			// console.log('mouse down', lastDraggedControlPoint);
 		}
 
 		// right and middle mouse button held down initiates grid dragging
@@ -181,6 +267,8 @@ function Canvas({
 			setGridDragStart({ x: clientX, y: clientY });
 		}
 	};
+
+
 
 	/* ---------------- if specific drag is true, drag that item ---------------- */
 	const handleMouseMove = (e) => {
@@ -241,6 +329,7 @@ function Canvas({
 	};
 
 
+
 	/* ----------------- handles the fit to screen button action ---------------- */
 	useEffect(() => {
 		if (!fitToScreenRef.current) {
@@ -252,6 +341,7 @@ function Canvas({
 			};
 		}
 	}, [fitToScreenRef, defaultOffset]);
+
 
 
 	/* ----------------- check if current curve is already saved ---------------- */
@@ -287,6 +377,7 @@ function Canvas({
 	}, [controlPoint1, controlPoint2, presetArray, setIsSaved]);
 
 
+
 	/* ---------------------- FINALLY SET THE BEZIER VALUES --------------------- */
 	useEffect(() => {
 		// rounds to 2 decimal places (0.00)
@@ -306,17 +397,74 @@ function Canvas({
 	/*                              RETURN STATEMENT                              */
 	/* -------------------------------------------------------------------------- */
 	return (
-		<canvas 
-			ref={canvasRef}
-			className='curve-canvas'
-			onMouseDown={handleMouseDown}
-			onMouseMove={handleMouseMove}
-			onMouseUp={handleMouseUp}
-			// onMouseLeave={handleMouseLeave}
-			onContextMenu={handleContextMenu}
-			onWheel={handleWheel}
-			style={ isDraggingGrid ? { cursor: 'grabbing' } : { cursor: 'default' }}
-		></canvas>
+
+		<>
+			<canvas 
+				ref={canvasRef}
+				className='curve-canvas'
+				onMouseDown={handleMouseDown}
+				onMouseMove={handleMouseMove}
+				onMouseUp={handleMouseUp}
+				// onMouseLeave={handleMouseLeave}
+				onDoubleClick={handleDoubleClick}
+				onContextMenu={handleContextMenu}
+				onWheel={handleWheel}
+				style={ isDraggingGrid ? { cursor: 'grabbing' } : { cursor: 'default' }}
+			></canvas>
+
+
+			{
+				isControlPointEditorOpen && (
+					<>
+						<div 
+							className="control-values-overlay"
+							onClick={() => setControlPointEditorOpen(false)}
+						></div>
+						<div 
+							className="control-values-content"
+							role='dialog'
+							aria-modal='true'
+							aria-labelledby='control-values-title'
+						>
+
+							<div 
+								className={`control-values-body ${lastDraggedControlPoint === 'cp1' ? 'cp1' : lastDraggedControlPoint === 'cp2' ? 'cp2' : ''}`}
+							>
+
+								{/* <label htmlFor="x-value">X</label> */}
+								<input 
+									id="x-value"
+									className='x-value first-box'
+									placeholder={`X: ${displayControlPointValue().X}`}
+									onChange={(e) => setControlPointValueChanger((prev) => ({ ...prev, X: e.target.value }))}
+									type="text"
+								/>
+
+								{/* <label htmlFor="y-value">Y</label> */}
+								<input 
+									id="y-value"
+									className='y-value'
+									placeholder={`Y: ${displayControlPointValue().Y}`}
+									onChange={(e) => setControlPointValueChanger((prev) => ({ ...prev, Y: e.target.value }))}
+									type="text"
+								/>
+
+							</div>
+
+							<div className="footer">
+								<button
+									className={`submit-button ${lastDraggedControlPoint === 'cp1' ? 'cp1' : lastDraggedControlPoint === 'cp2' ? 'cp2' : ''}`}
+									onClick={handleRelocatingControlPoint}
+								>Ok</button>
+							</div>
+
+						</div>
+					</>
+				)
+			}
+		
+		</>
+
 	)
 	/* -------------------------------------------------------------------------- */
 	/*                              RETURN STATEMENT                              */

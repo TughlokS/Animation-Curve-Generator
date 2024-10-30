@@ -6,6 +6,8 @@ import { useState } from 'react';
 
 function App() {
 
+	const [presetArray, setPresetArray] = useState([]);
+
 	const [bezierValues, setBezierValues] = useState({
 		cp1: { X: 0, Y: 0 },
 		cp2: { X: 1, Y: 1 },
@@ -28,6 +30,7 @@ function App() {
 			<div className="enclosed-container">
 
 				<CanvasGroup 
+					setMainPresetArray={setPresetArray}
 					bezierValues={bezierValues} 
 					setBezierValues={setBezierValues} 
 					setBezierValuesPreset={setBezierValuesPreset}
@@ -35,6 +38,7 @@ function App() {
 				/>
 
 				<AnimationGroup 
+					presetArray={presetArray}
 					bezierValuesCurve={bezierValues}
 					bezierValuesPreset={bezierValuesPreset}
 					presetTitle={presetTitle}

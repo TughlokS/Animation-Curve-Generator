@@ -3,21 +3,22 @@ import SearchBox from './SearchBox';
 import PresetCardContainer from './PresetCardContainer';
 import CanvasBox from './CanvasBox';
 import { PropTypes } from 'prop-types'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {v4 as uuidv4} from 'uuid';
 
 
 
 CanvasGroup.propTypes = {
+	setMainPresetArray: PropTypes.func.isRequired,
 	bezierValues: PropTypes.object.isRequired,
 	setBezierValues: PropTypes.func.isRequired,
 	setBezierValuesPreset: PropTypes.func.isRequired,
 	setPresetTitle: PropTypes.func.isRequired
 };
 
-function CanvasGroup({ bezierValues, setBezierValues, setBezierValuesPreset, setPresetTitle }) {
+function CanvasGroup({ setMainPresetArray, bezierValues, setBezierValues, setBezierValuesPreset, setPresetTitle }) {
 
-	const [presetArray, setPresetArray] = useState([ 
+	const defaultArray = [ 
 		{
 			id: uuidv4(),
 			title: 'Linear',
@@ -148,7 +149,26 @@ function CanvasGroup({ bezierValues, setBezierValues, setBezierValuesPreset, set
 			isFavorite: false,
 			isLocked: true,
 		},
-	]);
+	];
+
+	const [presetArray, setPresetArray] = useState(() => {
+		const savedPresets = localStorage.getItem('presetArray');
+		if (savedPresets) {
+			return JSON.parse(savedPresets);
+		} else {
+			return defaultArray
+		}
+	});
+
+	// save to local storage whenever presetArray changes
+	useEffect(() => {
+		localStorage.setItem('presetArray', JSON.stringify(presetArray));
+	}, [presetArray]);
+
+	// update mainPreset for curve title change
+	useEffect(() => {
+		setMainPresetArray(presetArray);
+	}, [presetArray, setMainPresetArray]);
 
 
 
