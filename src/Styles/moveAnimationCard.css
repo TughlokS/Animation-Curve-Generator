@@ -10,6 +10,7 @@
   width: 100%;
   background-color: #e7eef1; /* Ensure $light-secondary-color is correctly set */
   border-radius: 15px;
+  transition: all 0.2s ease-in-out;
 }
 .move-animation-card .animation-card-header {
   display: flex;

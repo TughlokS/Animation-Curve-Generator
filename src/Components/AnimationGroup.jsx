@@ -1,18 +1,100 @@
+/* eslint-disable no-unused-vars */
+import { useState } from 'react';
 import '../Styles/animationGroup.css'
 import MoveAnimationCard from './MoveAnimationCard'
+import { scssColors } from '../Helpers/env';
+import { PropTypes } from 'prop-types';
+import PopupSettingsPrompt from './PopupSettingsPrompt';
+import { areBezierValuesEqual } from '../Helpers/compareValues';
 
 
 
-function AnimationGroup() {
+AnimationGroup.propTypes = {
+	presetArray: PropTypes.array.isRequired,
+
+    bezierValuesCurve: PropTypes.shape({
+        cp1: PropTypes.shape({
+            X: PropTypes.number.isRequired,
+            Y: PropTypes.number.isRequired
+        }).isRequired,
+        cp2: PropTypes.shape({
+            X: PropTypes.number.isRequired,
+            Y: PropTypes.number.isRequired
+        }).isRequired
+    }).isRequired,
+
+	bezierValuesPreset: PropTypes.shape({
+		cp1: PropTypes.shape({
+			X: PropTypes.number.isRequired,
+			Y: PropTypes.number.isRequired
+		}).isRequired,
+		cp2: PropTypes.shape({
+			X: PropTypes.number.isRequired,
+			Y: PropTypes.number.isRequired
+		}).isRequired
+	}).isRequired,
+
+	presetTitle: PropTypes.string.isRequired,
+
+	bezierValuesLinear: PropTypes.shape({
+		cp1: PropTypes.shape({
+			X: PropTypes.number.isRequired,
+			Y: PropTypes.number.isRequired
+		}).isRequired,
+		cp2: PropTypes.shape({
+			X: PropTypes.number.isRequired,
+			Y: PropTypes.number.isRequired
+		}).isRequired
+	}).isRequired
+};
+
+
+function AnimationGroup( { presetArray, bezierValuesCurve, bezierValuesPreset, presetTitle, bezierValuesLinear } ) {
+	
+	const [animationSpeed, setAnimationSpeed] = useState(0.5);
+	const [nextAnimationDelay, setNextAnimationDelay] = useState(0.5);
+
+	const savedPreset = presetArray.find(obj => areBezierValuesEqual(obj.bezierValue, bezierValuesCurve));
+	
+	// const curveTitle = !areBezierValuesEqual(bezierValuesCurve, bezierValuesLinear) ? !areBezierValuesEqual(bezierValuesCurve, bezierValuesPreset) ? 'Curve' : presetTitle : 'Linear';
+	const curveTitle = savedPreset ? `Curve | ${savedPreset.title}` : 'Curve';
+
+	const dynamicPresetTitle = areBezierValuesEqual(bezierValuesPreset, bezierValuesLinear) ? 'Linear' : presetTitle;
+
+
+
 
 	return (
 		<div className="animation-group">
 
-			<MoveAnimationCard title='Curve' bodyText='0.0, 0.0, 1.0, 1.0' backgroundColor='#ff1861'/>
+			<div className="time-slider-container">
+				
+			</div>
 
-			<MoveAnimationCard title='Preset' bodyText='0.0, 0.0, 1.0, 1.0' backgroundColor='#00e1ff'/>
+			<MoveAnimationCard
+				title={curveTitle}
+				bezierValues={bezierValuesCurve} 
+				backgroundColor={scssColors.accent_red}
+				animationSpeed={animationSpeed}
+				nextAnimationDelay={nextAnimationDelay}
+			/>
+			<MoveAnimationCard
+				title={dynamicPresetTitle} 
+				bezierValues={bezierValuesPreset}
+				backgroundColor={scssColors.accent_blue}
+				animationSpeed={animationSpeed}
+				nextAnimationDelay={nextAnimationDelay}
+			/>
+			<MoveAnimationCard
+				title='Linear' 
+				bezierValues={bezierValuesLinear}
+				backgroundColor={scssColors.accent_green}
+				animationSpeed={animationSpeed}
+				nextAnimationDelay={nextAnimationDelay}
+			/>
 
-			<MoveAnimationCard title='Linear' bodyText='0.0, 0.0, 1.0, 1.0' backgroundColor='#18ffb2'/>
+			{/* test popupSettingsPrompt */}
+			
 
 		</div>
 	)

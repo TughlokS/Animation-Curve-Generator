@@ -1,6 +1,6 @@
 // src/Hooks/usePopup.js
 import { useContext } from 'react';
-import { PopupContext } from './PopupContext';
+import { PopupContext } from '../Components/PopupContext';
 
 const usePopup = () => {
   const { showPopup } = useContext(PopupContext);

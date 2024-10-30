@@ -4,30 +4,31 @@
 
 .canvas-box {
 	display: flex;
-	justify-content: start;
+	justify-content: flex-start;
 	align-items: center;
 	flex-direction: column;
 	padding: 25px;
 	gap: 23px;
-	height: 100%;
 	background-color: $light-secondary-color;
 	border-radius: 35px;
 
 
 	canvas {
 		// width: 750px;
-		width: 100%;
-		height: 100%;
+		width: 661px;
+		height: 500px;
 		// min-height: 600px;
-		background-color: $light-primary-color;
+		border: 2px solid transparent;
+		background-color: $dark-secondary-color;
 		border-radius: 15px;
 		box-shadow: inset 0px 0px 15px $drop-shadow-color; 
 
-		transition: box-shadow 0.3s ease-in-out;
+		transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
 
 		&:hover {
 			// box-shadow: inset 0px 0px 35px #bb135356;
 			box-shadow: inset 0px 0px 20px $accent-color-1;
+			border-color: $accent-color-1;
 		}
 	}
 
@@ -54,13 +55,25 @@
 			background-color: $dark-primary-color;
 
 			transition: all 0.2s ease-in-out;
-			
-			&:hover, &:focus-within {
+
+			input {
+				transition: all 0.2s ease-in-out;
+			}
+
+			/* Hover effect on the entire box */
+			&:hover {
 				box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
 				background-color: $accent-color-1;
 			}
-			&:hover .curve-values, &:focus-within .curve-values {
-				color: $light-secondary-color;
+
+			&:has(.btn:hover) {
+				box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
+				background-color: $dark-primary-color;
+			}
+		
+			/* Hover and focus effects on input elements */
+			&:has(input:hover) {
+				background-color: $accent-color-1;
 			}
 
 			// hide spinner button for chrome, safari, edge, and opera
@@ -86,9 +99,10 @@
 				width: 60px;
 				padding: 5px;
 				font-size: 16px;
-				font-weight: 700;
+				font-weight: bold;
+				// transition: all 0.2s ease-in-out;
 
-				transition: color 0.2s ease-in-out;
+				
 			}
 
 			.curve-values:nth-child(1), .curve-values:nth-child(2), .curve-values:nth-child(3) {
@@ -103,15 +117,24 @@
 			padding: 3px;
 			border-radius: 5px;
 			background-color: $light-secondary-color;
-			// box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-			// border: 1px solid red;
 			transition: all 0.2s ease-in-out;
+
+			&.active {
+				background-color: $accent-color-1;
+
+				&:hover {
+					background-color: $light-secondary-color;
+					.setting-btn-icon, .grid-btn-icon, .fit-btn-icon, .save-btn-icon, .info-btn-icon {
+						background-color: $accent-color-1;
+					}
+				}
+			}
 
 			&:hover {
 				background-color: $accent-color-1;
 				box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
 
-				.grid-btn-icon, .fit-btn-icon, .save-btn-icon {
+				.setting-btn-icon, .grid-btn-icon, .fit-btn-icon, .save-btn-icon, .info-btn-icon {
 					background-color: $light-secondary-color;
 				}
 			}
@@ -128,7 +151,11 @@
 			background-color: $dark-primary-color;
 			cursor: pointer;
 			transition: background-color 0.2s ease-in-out;
-	
+
+			&.active {
+				background-color: $light-secondary-color;
+			}
+			
 			/* Common mask styles */
 			-webkit-mask-repeat: no-repeat;
 			mask-repeat: no-repeat;
@@ -139,6 +166,17 @@
 		}
 	
 		/* Specific masks for each button */
+		.setting-btn-icon {
+			-webkit-mask-image: url('./setting.svg');
+			mask-image: url('./setting.svg');
+			-webkit-mask-repeat: no-repeat;
+			mask-repeat: no-repeat;
+			-webkit-mask-position: center;
+			mask-position: center;
+			-webkit-mask-size: contain;
+			mask-size: contain;
+		}
+
 		.grid-btn-icon {
 			-webkit-mask-image: url('./grid.svg');
 			mask-image: url('./grid.svg');
@@ -171,12 +209,43 @@
 			-webkit-mask-size: contain;
 			mask-size: contain;
 		}
+
+		.info-btn-icon {
+			-webkit-mask-image: url('./info.svg');
+			mask-image: url('./info.svg');
+			-webkit-mask-repeat: no-repeat;
+			mask-repeat: no-repeat;
+			-webkit-mask-position: center;
+			mask-position: center;
+			-webkit-mask-size: contain;
+			mask-size: contain;
+		}
 	}
-	
+
 }
 
 
 #tooltip {
 	border-radius: 10px;
 	background-color: $accent-color-1 !important;
+}
+
+#modal-tooltip {
+	// top: 350px !important;
+	z-index: 1001 !important;
+	border-radius: 7px !important;
+	background-color: $dark-primary-color !important;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35) !important;
+}
+
+
+@keyframes slideDown {
+	from {
+		transform: translate(-50%, -60%);
+		opacity: 0;
+	}
+	to {
+		transform: translate(-50%, -50%);
+		opacity: 1;
+	}
 }

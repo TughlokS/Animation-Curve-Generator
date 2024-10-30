@@ -2,38 +2,62 @@ import { useId, useRef } from 'react';
 import '../Styles/presetCard.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import PropTypes from 'prop-types';
-import useOverflow from './useOverFlow';
-import usePopup from './usePopup';
-// import {FaCheckCircle} from 'react-icons/fa';
+import useOverflow from '../Hooks/useOverFlow';
+import usePopup from '../Hooks/usePopup';
 
 
+
+PresetCard.propTypes = {
+    title: PropTypes.string,
+    bezierValue: PropTypes.shape({
+        cp1: PropTypes.shape({
+            X: PropTypes.number.isRequired,
+            Y: PropTypes.number.isRequired
+        }).isRequired,
+        cp2: PropTypes.shape({
+            X: PropTypes.number.isRequired,
+            Y: PropTypes.number.isRequired
+        }).isRequired
+    }).isRequired,
+    setBezierValuesPreset: PropTypes.func.isRequired,
+    setPresetTitle: PropTypes.func.isRequired
+}
 
 function PresetCard({ 
     title = "Preset Name", 
-    bodyText = "0.0, 0.0, 1.0, 1.0," 
+    bezierValue,
+    setBezierValuesPreset,
+    setPresetTitle
 }) {
 
     const uniqueId = useId();
 
+    const { cp1, cp2 } = bezierValue;
+
+    const bezierValueStr = `${cp1.X}, ${cp1.Y}, ${cp2.X}, ${cp2.Y}`;
     const titleTooltipID = `title-tooltip-${uniqueId}`;
     const bodyTextTooltipID = `body-text-tooltip-${uniqueId}`;
     const copyIconTooltipID = `copy-icon-tooltip-${uniqueId}`;
 
-	const bodyTextRef = useRef(null);
+	const bezierValueRef = useRef(null);
 	const titleRef = useRef(null);
 
-    const isBodyOverflowing = useOverflow(bodyTextRef);
+    const isBodyOverflowing = useOverflow(bezierValueRef);
     const isHeaderOverflowing = useOverflow(titleRef);
 
     const { triggerPopup } = usePopup();
 
+    
+
+    /* -------------------------------------------------------------------------- */
+    /*               // HANDLES COPING TO CLIPBOARD FUNCTIONALITY \\              */
+    /* -------------------------------------------------------------------------- */
     const handleCopy = () => {
-        const copyText = `cubic-bezier(${bodyText})`;
+        const copyText = `cubic-bezier(${bezierValueStr})`;
         navigator.clipboard.writeText(copyText)
             .then(() => {
                 triggerPopup({
                     content: `Copied`,
-                    // icon: <FaCheckCircle/>,
                     duration: 500,
                     position: 'screen-top-center',
                 })
@@ -42,9 +66,26 @@ function PresetCard({
                 console.error('Failed to copy!', err);
             });
     };
+    /* -------------------------------------------------------------------------- */
+    /*               // HANDLES COPING TO CLIPBOARD FUNCTIONALITY \\              */
+    /* -------------------------------------------------------------------------- */
+
+
+    /* -------------------------------------------------------------------------- */
+    /*                           HANDLES PASSING VALUES                           */
+    /* -------------------------------------------------------------------------- */
+    const handleCardClick = () => {
+        setBezierValuesPreset(bezierValue);
+        setPresetTitle(title);
+    };
+    /* -------------------------------------------------------------------------- */
+    /*                           HANDLES PASSING VALUES                           */
+    /* -------------------------------------------------------------------------- */
+    
+
 
     return (
-        <div className="preset-card">
+        <div className="preset-card" onClick={handleCardClick}>
 
             <div className="card-header">
                 <p
@@ -69,11 +110,11 @@ function PresetCard({
 
             <p
                 className="body-text"
-				ref={bodyTextRef}
+				ref={bezierValueRef}
                 data-tooltip-id={ isBodyOverflowing ? bodyTextTooltipID : undefined }
-                data-tooltip-content={ isBodyOverflowing ? bodyText : undefined }
+                data-tooltip-content={ isBodyOverflowing ? bezierValueStr : undefined }
             >
-                {bodyText}
+                {bezierValueStr}
             </p>
 
             <ReactTooltip 
@@ -106,9 +147,5 @@ function PresetCard({
     );
 }
 
-PresetCard.propTypes = {
-    title: PropTypes.string,
-    bodyText: PropTypes.string
-}
 
 export default PresetCard;

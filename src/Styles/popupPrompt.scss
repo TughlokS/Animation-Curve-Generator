@@ -1,0 +1,516 @@
+@import 'config';
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                               SETTINGS MODAL                               */
+/* -------------------------------------------------------------------------- */
+.settings-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	z-index: 1000;
+}
+
+.settings-modal-content {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 450px;
+	max-width: 90%;
+	padding: 30px 45px;
+	border-radius: 15px;
+	background: $dark-primary-color;
+	box-shadow: 0 0px 30px rgba(0, 0, 0, 0.2);
+	z-index: 1001;
+	animation: slideDown 0.3s ease;
+
+	.settings-modal-body {
+		// margin-bottom: 20px;
+		display: flex;
+		flex-direction: row;
+		height: 45px;
+		gap: 10px;
+
+		.slider-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: row;
+			gap: 10px;
+			padding: 10px;
+			border: 2px solid transparent;
+			border-radius: 10px;				
+			box-shadow: 0 0px 30px rgba(0, 0, 0, 0.2);
+			transition: all 0.3s ease;
+			
+			&:focus-within {
+				border-color: $accent-color-1;
+			}
+
+			.custom-slider {
+				width: 100%;
+				height: 2px;
+				appearance: none;
+				-webkit-appearance: none;
+				outline: none;
+				border-radius: 5px;
+				background-color: $dark-secondary-color;
+				transition: background-color 0.3s ease;
+
+				&:hover {
+					background-color: $light-secondary-color;
+
+					&::-webkit-slider-thumb {
+						background-color: $light-primary-color;
+					}
+				}
+
+				&.default-step {
+					&::-webkit-slider-thumb {
+						-webkit-appearance: none;
+						appearance: none;
+						width: 10px;
+						height: 25px;
+						border-radius: 10px;
+						background-color: $accent-color-3;
+						cursor: pointer;
+						transition: background-color 0.3s ease;
+					}
+
+					&::-moz-range-thumb {
+						width: 20px;
+						height: 20px;
+						border-radius: 50%;
+						background-color: $accent-color-3;
+						cursor: pointer;
+						transition: background-color 0.3s ease;
+					}
+				}
+
+				&::-webkit-slider-thumb {
+					-webkit-appearance: none;
+					appearance: none;
+					width: 10px;
+					height: 25px;
+					border-radius: 10px;
+					background-color: $accent-color-1;
+					cursor: pointer;
+					transition: background-color 0.3s ease;
+				}
+
+				&::-moz-range-thumb {
+					width: 20px;
+					height: 20px;
+					border-radius: 50%;
+					background-color: $accent-color-1;
+					cursor: pointer;
+					transition: background-color 0.3s ease;
+				}
+			}
+
+			.slider-labels {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 35px;
+				width: 100px;
+				background-color: $dark-primary-color;
+				border-radius: 5px;
+
+				.slider-label {
+					text-align: center;
+					font-size: 16px;
+					font-weight: bold;
+					color: $light-secondary-color;
+				}
+			}
+		}
+
+
+		.close-button {
+			width: 100px;
+			// padding: 0px 30px;
+			outline: none;
+			border: none;
+			border-radius: 10px;
+			background-color: $accent-color-1;
+			color: $light-secondary-color;
+			font-size: 16px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: 0.3s ease;
+
+			&:hover {
+				background-color: $light-secondary-color;
+				color: $dark-primary-color;
+			}
+		}
+	}
+}
+
+/* Optional: Add transition for modal appearance */
+.settings-modal-overlay,
+.settings-modal-content {
+	transition: all 0.3s ease;
+}
+/* -------------------------------------------------------------------------- */
+/*                               SETTINGS MODAL                               */
+/* -------------------------------------------------------------------------- */
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 SAVED MODAL                                */
+/* -------------------------------------------------------------------------- */
+.saved-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	z-index: 1000;
+}
+
+.saved-modal-content {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 450px;
+	max-width: 90%;
+	padding: 30px 45px;
+	border-radius: 15px;
+	background: $dark-primary-color;
+	box-shadow: 0 0px 30px rgba(0, 0, 0, 0.2);
+	z-index: 1001;
+	animation: slideDown 0.3s ease;
+
+
+	.saved-modal-body {
+		display: flex;
+		flex-direction: row;
+		height: 45px;
+		gap: 10px;
+
+		.text-input-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: row;
+			gap: 10px;
+			padding: 10px;
+			border: 2px solid transparent;
+			border-radius: 10px;
+			box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+			transition: 0.3s ease;
+
+
+			label {
+				color: $light-text-body-color;
+				font-size: 16px;
+				padding-right: 10px;
+				border-right: 1px solid $light-secondary-color;
+			}
+
+			input[type="text"] {
+				width: 100%;
+				height: 100%;
+				color: $accent-color-2;
+				font-size: 16px;
+				outline: none;
+				background-color: transparent;
+				border: 2px solid transparent;
+				border-radius: 5px;
+
+				&::placeholder {
+					color: #32575c;
+				}
+			}
+			&:has(input[type="text"]:focus) {
+				border-color: $accent-color-2;
+			}
+			input:-webkit-autofill,
+			input:-webkit-autofill:hover, 
+			input:-webkit-autofill:focus, 
+			input:-webkit-autofill:active {
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: $accent-color-2;
+				transition: background-color 5000s ease-in-out 0s;
+				box-shadow: inset 0 0 20px 20px #23232300;
+			}
+
+		}
+
+
+		button {
+			width: 100px;
+			outline: none;
+			border: none;
+			border-radius: 10px;
+			background-color: $accent-color-2;
+			color: $light-secondary-color;
+			font-size: 16px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: 0.3s ease;
+
+			&:hover {
+				background-color: $light-secondary-color;
+				color: $dark-primary-color;
+			}
+		}
+	}
+}
+/* -------------------------------------------------------------------------- */
+/*                                 SAVED MODAL                                */
+/* -------------------------------------------------------------------------- */
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                                UN-SAVE MODAL                               */
+/* -------------------------------------------------------------------------- */
+.unsave-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	z-index: 1000;
+}
+
+.unsave-modal-content {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 450px;
+	max-width: 90%;
+	padding: 30px 45px;
+	border-radius: 15px;
+	background: $dark-primary-color;
+	box-shadow: 0 0px 30px rgba(0, 0, 0, 0.2);
+	z-index: 1001;
+	animation: slideDown 0.3s ease;
+
+
+	.unsave-modal-body {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		gap: 20px;
+
+		label {
+			text-align: center;
+			font-size: 18px;
+			color: $light-secondary-color;
+		}
+
+		.buttons {
+			display: flex;
+			justify-content: space-evenly;
+			align-items: center;
+			flex-direction: row;
+			gap: 10px;
+			width: 100%;
+			padding: 10px;
+
+			.unsave-button, .cancel-button {
+				width: 100px;
+				height: 45px;
+				color: $light-secondary-color;
+				font-size: 16px;
+				font-weight: bold;
+				border: none;
+				outline: none;
+				border-radius: 8px;
+				transition: all 0.3s ease;
+				
+				&:hover {
+					background-color: $light-secondary-color;
+					color: $dark-primary-color;
+				}
+			}
+
+			.unsave-button {
+				background-color: $accent-color-2;
+
+			}
+			
+			.cancel-button {
+				background-color: $accent-color-1;
+			}
+		}
+	}
+}
+/* -------------------------------------------------------------------------- */
+/*                                UN-SAVE MODAL                               */
+/* -------------------------------------------------------------------------- */
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                            CONTROL-VALUES MODAL                            */
+/* -------------------------------------------------------------------------- */
+.control-values-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	z-index: 1000;
+}
+
+.control-values-content {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 450px;
+	max-width: 90%;
+	padding: 30px 45px;
+	border-radius: 15px;
+	background: $dark-primary-color;
+	box-shadow: 0 0px 30px rgba(0, 0, 0, 0.2);
+	z-index: 1001;
+	animation: slideDown 0.3s ease;
+
+
+	.control-values-body {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+		align-items: center;
+		gap: 2px;
+		border-radius: 10px;
+		border: 2px solid transparent;
+		background-color: $dark-primary-color;
+		box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+		transition: all 0.2s ease;
+		
+		::placeholder {
+			transition: all 0.2s ease;
+		}
+
+		&.cp1 {
+			&:hover, &:has(:focus-within) {
+				background-color: $accent-color-1;
+
+				::placeholder {
+					color: #690021a4;
+				}
+			}
+		}
+
+		&.cp2 {
+			&:hover, &:has(:focus-within) {
+				background-color: $accent-color-2;
+
+				::placeholder {
+					color: #006d7c94;
+				}
+			}
+		}
+
+		input {
+			text-align: center;
+			border: none;
+			outline: none;
+			background-color: transparent;
+			color: $light-secondary-color;
+			width: 100%;
+			height: 50px;
+			padding: 5px;
+			font-size: 16px;
+			font-weight: bold;
+			transition: all 0.2s ease-in-out;
+
+			&.first-box {
+				border-right: 1px solid $light-secondary-color;
+			}
+		}
+	}
+
+	.footer {
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+		flex-direction: row;
+		margin-top: 20px;
+
+		button {
+			width: 100%;
+			padding: 10px;
+			border: none;
+			outline: none;
+			color: $light-secondary-color;
+			font-size: 16px;
+			font-weight: bold;
+			border-radius: 10px;
+			transition: all 0.2s ease;
+
+			&:hover {
+				color: $dark-primary-color;
+			}
+
+			&.cp1 {
+				background-color: $accent-color-1;
+				
+				&:hover {
+					background-color: $light-secondary-color;
+				}
+			}
+
+			&.cp2 {
+				background-color: $accent-color-2;
+				
+				&:hover {
+					background-color: $light-secondary-color;
+				}
+			}
+		}
+	}
+}
+/* -------------------------------------------------------------------------- */
+/*                            CONTROL-VALUES MODAL                            */
+/* -------------------------------------------------------------------------- */
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 INFO MODAL                                 */
+/* -------------------------------------------------------------------------- */
+.info-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	z-index: 1000;
+}
+/* -------------------------------------------------------------------------- */
+/*                                 INFO MODAL                                 */
+/* -------------------------------------------------------------------------- */
+
+
+
+@keyframes slideDown {
+	from {
+		transform: translate(-50%, -70%);
+		opacity: 0;
+	}
+	to {
+		transform: translate(-50%, -50%);
+		opacity: 1;
+	}
+}
