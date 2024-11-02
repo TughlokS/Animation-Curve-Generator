@@ -4,21 +4,31 @@ import ghpages from 'gh-pages';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// __dirname and __filename are not available in ES modules, so we derive them
+// Derive __dirname since it's not available in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Set a custom cache directory with a short path
+const cacheDir = 'C:/gh-pages-cache';
+
+// Ensure the cache directory exists or create it
+import fs from 'fs';
+if (!fs.existsSync(cacheDir)) {
+  fs.mkdirSync(cacheDir, { recursive: true });
+}
+
 ghpages.publish(
-  path.join(__dirname, 'dist'), // path to your build directory
+  path.join(__dirname, 'dist'),
   {
     branch: 'gh-pages',
-    repo: 'https://github.com/TughlokS/Animation-Curve-Generator.git', // Update with your repo URL
+    repo: 'https://github.com/TughlokS/Animation-Curve-Generator.git',
     user: {
-      name: 'Tughloks', // Replace with your GitHub username
-      email: 'tughloks@hotmail.com', // Replace with your email
+      name: 'Tughloks',
+      email: 'tughloks@hotmail.com',
     },
-    cache: '.gh-pages-cache', // Specify a shorter cache directory
+    cache: cacheDir, // Use the custom cache directory
     dotfiles: true,
+    git: 'C:/Program Files/Git/cmd/git.exe', // Ensure this path is correct
   },
   (err) => {
     if (err) {
