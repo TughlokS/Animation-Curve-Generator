@@ -1,5 +1,5 @@
 {
-  "homepage": "https://tughloks.github.io/Animation-Curve-Generator",
+  "homepage": "https://tughloks.github.io/animation-curve-generator",
   "name": "vite-project",
   "private": true,
   "version": "0.0.0",
@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "lodash": "^4.17.21",
