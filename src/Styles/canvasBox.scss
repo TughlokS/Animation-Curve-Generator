@@ -167,8 +167,8 @@
 	
 		/* Specific masks for each button */
 		.setting-btn-icon {
-			-webkit-mask-image: url('./setting.svg');
-			mask-image: url('./setting.svg');
+			-webkit-mask-image: url('../assets/setting.svg');
+			mask-image: url('../assets/setting.svg');
 			-webkit-mask-repeat: no-repeat;
 			mask-repeat: no-repeat;
 			-webkit-mask-position: center;
@@ -178,8 +178,8 @@
 		}
 
 		.grid-btn-icon {
-			-webkit-mask-image: url('./grid.svg');
-			mask-image: url('./grid.svg');
+			-webkit-mask-image: url('../assets/grid.svg');
+			mask-image: url('../assets/grid.svg');
 			-webkit-mask-repeat: no-repeat;
 			mask-repeat: no-repeat;
 			-webkit-mask-position: center;
@@ -189,8 +189,10 @@
 		}
 	
 		.fit-btn-icon {
-			-webkit-mask-image: url('/fit.svg');
-			mask-image: url('/fit.svg');
+			// -webkit-mask-image: url('/fit.svg');
+			// mask-image: url('/fit.svg');
+			-webkit-mask-image: url('../assets/fit.svg');
+			mask-image: url('../assets/fit.svg');
 			-webkit-mask-repeat: no-repeat;
 			mask-repeat: no-repeat;
 			-webkit-mask-position: center;
@@ -200,8 +202,8 @@
 		}
 	
 		.save-btn-icon {
-			-webkit-mask-image: url('/save.svg');
-			mask-image: url('/save.svg');
+			-webkit-mask-image: url('../assets/save.svg');
+			mask-image: url('../assets/save.svg');
 			-webkit-mask-repeat: no-repeat;
 			mask-repeat: no-repeat;
 			-webkit-mask-position: center;
@@ -211,8 +213,8 @@
 		}
 
 		.info-btn-icon {
-			-webkit-mask-image: url('./info.svg');
-			mask-image: url('./info.svg');
+			-webkit-mask-image: url('../assets/info.svg');
+			mask-image: url('../assets/info.svg');
 			-webkit-mask-repeat: no-repeat;
 			mask-repeat: no-repeat;
 			-webkit-mask-position: center;
