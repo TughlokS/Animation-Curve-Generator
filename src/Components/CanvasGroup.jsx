@@ -154,9 +154,9 @@ function CanvasGroup({ setMainPresetArray, bezierValues, setBezierValues, setBez
 	const [presetArray, setPresetArray] = useState(() => {
 		const savedPresets = localStorage.getItem('presetArray');
 		if (savedPresets) {
-			return JSON.parse(savedPresets);
+			return JSON.parse(savedPresets).sort((a, b) => a.title.localeCompare(b.title));
 		} else {
-			return defaultArray
+			return defaultArray.sort((a, b) => a.title.localeCompare(b.title));
 		}
 	});
 
