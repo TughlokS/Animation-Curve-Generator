@@ -38,7 +38,7 @@
   /* Custom scrollbar for WebKit browsers */
 }
 .preset-card-container::-webkit-scrollbar {
-  width: 5px;
+  width: 10px;
 }
 .preset-card-container::-webkit-scrollbar-track {
   background: #d1d1d1;
