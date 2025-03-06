@@ -8,15 +8,17 @@ import {v4 as uuidv4} from 'uuid';
 
 
 
-CanvasGroup.propTypes = {
-	setMainPresetArray: PropTypes.func.isRequired,
-	bezierValues: PropTypes.object.isRequired,
-	setBezierValues: PropTypes.func.isRequired,
-	setBezierValuesPreset: PropTypes.func.isRequired,
-	setPresetTitle: PropTypes.func.isRequired
-};
+
 
 function CanvasGroup({ setMainPresetArray, bezierValues, setBezierValues, setBezierValuesPreset, setPresetTitle }) {
+
+	CanvasGroup.propTypes = {
+		setMainPresetArray: PropTypes.func.isRequired,
+		bezierValues: PropTypes.object.isRequired,
+		setBezierValues: PropTypes.func.isRequired,
+		setBezierValuesPreset: PropTypes.func.isRequired,
+		setPresetTitle: PropTypes.func.isRequired
+	};
 
 	const defaultArray = [ 
 		{
@@ -121,16 +123,6 @@ function CanvasGroup({ setMainPresetArray, bezierValues, setBezierValues, setBez
 		},
 		{
 			id: uuidv4(),
-			title: 'Lightning',
-			bezierValue: {
-				cp1: { X: 1, Y: 0 },
-				cp2: { X: 0, Y: 1 },
-			},
-			isFavorite: false,
-			isLocked: true,
-		},
-		{
-			id: uuidv4(),
 			title: 'Glitch',
 			bezierValue: {
 				cp1: { X: 1, Y: 2 },
@@ -151,6 +143,7 @@ function CanvasGroup({ setMainPresetArray, bezierValues, setBezierValues, setBez
 		},
 	];
 
+
 	const [presetArray, setPresetArray] = useState(() => {
 		const savedPresets = localStorage.getItem('presetArray');
 		if (savedPresets) {
@@ -160,15 +153,57 @@ function CanvasGroup({ setMainPresetArray, bezierValues, setBezierValues, setBez
 		}
 	});
 
+
+	const [filteredPresets, setFilteredPresets] = useState(presetArray);
+
+
 	// save to local storage whenever presetArray changes
 	useEffect(() => {
 		localStorage.setItem('presetArray', JSON.stringify(presetArray));
+		setFilteredPresets(presetArray);
 	}, [presetArray]);
+
 
 	// update mainPreset for curve title change
 	useEffect(() => {
 		setMainPresetArray(presetArray);
 	}, [presetArray, setMainPresetArray]);
+
+
+	// handle search
+	const handleSearch = (query) => {
+		if (!query.trim()) {
+			setFilteredPresets(presetArray);
+			return;
+		}
+	
+		const lowerQuery = query.toLowerCase();
+	
+		// Split into matches and non-matches
+		const matches = [];
+		const nonMatches = [];
+	
+		presetArray.forEach((preset) => {
+			const titleMatch = preset.title.toLowerCase().includes(lowerQuery);
+			const bezierStr = `${preset.bezierValue.cp1.X},${preset.bezierValue.cp1.Y},${preset.bezierValue.cp2.X},${preset.bezierValue.cp2.Y}`;
+			const bezierMatch = bezierStr.includes(lowerQuery.replace(/\s+/g, ''));
+	
+			if (titleMatch || bezierMatch) {
+				matches.push(preset);
+			} else {
+				nonMatches.push(preset);
+			}
+		});
+	
+		// Sort both arrays alphabetically by title
+		matches.sort((a, b) => a.title.localeCompare(b.title));
+		nonMatches.sort((a, b) => a.title.localeCompare(b.title));
+	
+		// Concatenate matches followed by non-matches
+		const sortedResult = [...matches, ...nonMatches];
+	
+		setFilteredPresets(sortedResult);
+	};
 
 
 
@@ -182,12 +217,12 @@ function CanvasGroup({ setMainPresetArray, bezierValues, setBezierValues, setBez
 				setPresetArray={setPresetArray}
 			/>
 
-			<SearchBox />
+			<SearchBox onSearch={handleSearch}/>
 
 			<PresetCardContainer 
 				setBezierValuesPreset={setBezierValuesPreset} 
 				setPresetTitle={setPresetTitle}
-				presetArray={presetArray}
+				presetArray={filteredPresets}
 			/>
 
 		</div>

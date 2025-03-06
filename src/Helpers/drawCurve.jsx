@@ -98,6 +98,3 @@ export const drawCurve = (ctx, controlPoint1 = { X: 0.25, Y: 0.1 }, controlPoint
 	ctx.arc(controlPoint2.X, controlPoint2.Y, 10, 0, Math.PI * 2);
 	ctx.stroke();
 };
-
-
-// const 

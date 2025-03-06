@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 
 import '../Styles/moveAnimationCard.css';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import useOverflow from '../Hooks/useOverFlow'; // Adjust the path as necessary
 import usePopup from '../Hooks/usePopup';
+import { PopupPositions } from '../Constants/popupConstants';
 
 
 
@@ -20,6 +21,12 @@ function MoveAnimationCard({
     // Refs for title and body text
     const titleRef = useRef(null);
     const bodyTextRef = useRef(null);
+    const copyButtonRef = useRef(null);
+
+    const uniqueId = useId();
+    const copyIconTooltipID = `copy-icon-tooltip-${uniqueId}`;
+
+    const [showCopyTooltip, setShowCopyTooltip] = useState(true);
 
     /* ------------- // CUSTOM HOOKS FOR TEXT OVERFLOW DETECTION \\ ------------- */
     const isTitleOverflowing = useOverflow(titleRef);
@@ -30,18 +37,32 @@ function MoveAnimationCard({
 
 
 
+    // set a timer of 500ms to set showCopyTooltip to true
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowCopyTooltip(true);
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [showCopyTooltip]);
+
+
+
     /* -------------------------------------------------------------------------- */
     /*               // HANDLES COPING TO CLIPBOARD FUNCTIONALITY \\              */
     /* -------------------------------------------------------------------------- */
     const handleCopy = () => {
+        setShowCopyTooltip(false);
         const bezierString = `cubic-bezier(${bezierValues.cp1.X}, ${bezierValues.cp1.Y}, ${bezierValues.cp2.X}, ${bezierValues.cp2.Y})`;
         navigator.clipboard.writeText(bezierString)
         .then(() => {
             triggerPopup({
-                content: `Copied`,
-                // icon: <FaCheckCircle/>,
+                content: `Copied ${bezierString}`,
                 duration: 500,
-                position: 'screen-top-center',
+                position: PopupPositions.SCREEN_TOP_CENTER,
+                targetRef: copyButtonRef,
+                unique: true,
+                type: 'copy',
             })
         })
         .catch(err => {
@@ -54,9 +75,8 @@ function MoveAnimationCard({
 
 
 
-    /* ------------- // DYNAMICALLY SETS BG COLOR OF COPY BUTTON \\ ------------- */
+    /* -------- dynamically sets the background color of the copy button -------- */
     const [currentCopyBtnBackgroundColor, setCurrentCopyBtnBackgroundColor] = useState("transparent");
-    /* ------------- // DYNAMICALLY SETS BG COLOR OF COPY BUTTON \\ ------------- */
 
 
 
@@ -148,7 +168,7 @@ function MoveAnimationCard({
 
                 <div 
                     className="animation-copy-btn"
-                    data-tooltip-id="copy-tooltip" 
+                    data-tooltip-id={ copyIconTooltipID }
                     data-tooltip-content="Copy"
                     aria-label="Copy"
                     onMouseEnter={() => setCurrentCopyBtnBackgroundColor(backgroundColor)}
@@ -157,6 +177,7 @@ function MoveAnimationCard({
                     onClick={handleCopy}
                     role="button"
                     tabIndex={0}
+                    ref={copyButtonRef}
                 >
                     <div className="animation-copy-btn-icon"></div>
                 </div>
@@ -192,15 +213,16 @@ function MoveAnimationCard({
                 arrowColor='transparent'
                 className="custom-animation-card-tooltip"
             />
-            <ReactTooltip
-                id="copy-tooltip"
-                place="top"
-                effect="solid"
-                delayShow={400}
-                arrowColor='transparent'
-                // style={{ backgroundColor: currentCopyBtnBackgroundColor }}
-                className="custom-animation-card-tooltip"
-            />
+            { showCopyTooltip &&
+                <ReactTooltip
+                    id={ copyIconTooltipID }
+                    place="top"
+                    effect="solid"
+                    delayShow={400}
+                    arrowColor='transparent'
+                    className="custom-animation-card-tooltip"
+                />
+            }
 
         </div>
     );

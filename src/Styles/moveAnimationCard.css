@@ -1,5 +1,25 @@
 /* --------------------------------- COLORS --------------------------------- */
 /* --------------------------------- FONTS --------------------------------- */
+/* ----------- css root variables corresponding to scss variables ----------- */
+:root {
+  --light-primary-color: #e7eef1;
+  --light-secondary-color: #fdfdfd;
+  --light-text-header-color: #1c1c1c;
+  --light-text-body-color: #a1a1a1;
+  --dark-primary-color: #22262e;
+  --dark-secondary-color: #2d3139;
+  --dark-text-header-color: #fdfdfd;
+  --dark-text-body-color: #7c7c7c;
+  --accent-color-1: #ff1861;
+  --accent-color-2: #00e1ff;
+  --accent-2-text: #097886;
+  --accent-color-3: #00ffaa;
+  --drop-shadow-color: #00000025;
+  --text-font-size: 16px;
+  --header-text-font-weight: 700;
+  --body-text-font-weight: 400;
+}
+
 .move-animation-card {
   display: flex;
   justify-content: center;

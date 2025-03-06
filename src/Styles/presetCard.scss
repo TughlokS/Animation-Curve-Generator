@@ -3,6 +3,7 @@
 
 
 .preset-card {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -12,15 +13,41 @@
     min-width: 185px;
     flex: 1 1 0;
     background-color: $light-secondary-color;
-    border: 4px solid transparent;
+    // border: 4px solid transparent;
     border-radius: 25px;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: flex 0.3s ease, background var(--card-before-transition, all 0.3s ease), box-shadow 0.3s ease;
 
     &:hover {
-        border-color: $accent-color-2;
-        // box-shadow: inset 0px 0px 15px $accent-color-2;
+        flex: 1.5;
+        box-shadow: inset 0px 0px 15px $accent-color-2;
     }
+    
+    &::before {
+        // --card-before-transition: 0.3s;
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background-color: $accent-color-2;
+        border-radius: 25px; 
+        transform: translate(-50%, -50%);
+        transition: width var(--card-before-transition, 0.3s ease),
+                    height var(--card-before-transition, 0.3s ease),;
+        z-index: 0;
+    }
+
+    &.active::before {
+        width: 100%;
+        height: 100%;
+        border-radius: 25px;
+    }
+
+    // &.clicked {
+        // TODO
+    // }
 
     .card-header {
         display: flex;
@@ -89,8 +116,74 @@
     }
 }
 
+.preset-card.active { 
+    .card-header {
+        z-index: 1;
+
+        .title {
+            color: $light-secondary-color;
+        }
+
+        .copy-btn {
+            &:hover {
+                background-color: $light-secondary-color;
+            }
+
+            &:hover .copy-btn-icon {
+                background-color: $dark-secondary-color;
+            }
+        }
+
+        .copy-btn-icon {
+            background-color: $light-secondary-color;
+        }
+
+        
+    }
+
+    .body-text {
+        color: $accent-2-text;
+        z-index: 1;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+/* ------------------------- OUTSIDE OF PRESET CARD ------------------------- */
 .custom-preset-card-tooltip {
     border-radius: 10px !important;
     background-color: $dark-primary-color !important;
-    /* Add any additional styles for consistency */
+}
+
+
+
+
+
+
+
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                             KEYFRAME ANIMATIONS                            */
+/* -------------------------------------------------------------------------- */
+@keyframes clickAnimation {
+    0% {
+        width: 0%;
+        height: 0%;
+        opacity: 1;
+    }
+    100% {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+    }
 }
