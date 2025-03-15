@@ -31,6 +31,8 @@ function PresetCard({
                 Y: PropTypes.number.isRequired
             }).isRequired
         }).isRequired,
+        isFavorite: PropTypes.bool,
+        isLocked: PropTypes.bool,
         setBezierValuesPreset: PropTypes.func.isRequired,
         setPresetTitle: PropTypes.func.isRequired,
         isActive: PropTypes.bool.isRequired,

@@ -15,7 +15,7 @@
     background-color: $light-secondary-color;
     border-radius: 25px;
     cursor: pointer;
-    transition: flex 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: flex 0.3s cubic-bezier(0, 0, 0.5, 1.5), background-color 0.3s ease, box-shadow 0.3s ease;
     // background var(--card-before-transition, all 0.3s ease)
 
     &:hover {

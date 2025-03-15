@@ -140,6 +140,7 @@ function SaveModal({ isOpen, presetTitle, setPresetTitle, onSave, onClose }) {
 						<input
 							type="text"
 							autoFocus
+							autoComplete="off"
 							id="preset-name"
 							placeholder="New Preset"
 							className="title-input"

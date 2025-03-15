@@ -17,8 +17,8 @@ let globalScale = 1;
 export function drawGrid(ctx, canvasWidth, canvasHeight, cellSize, offsetX = 0, offsetY = 0, scale = 1) {
 	// set global variables
 	globalOffsetY = offsetY;
-	width = canvasWidth;
-	height = canvasHeight;
+	width = ctx.canvas.clientWidth;;
+	height = ctx.canvas.clientHeight;;
 	globalCellSize = cellSize;
 	globalScale = scale;
 	

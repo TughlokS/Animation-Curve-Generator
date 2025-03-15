@@ -6,11 +6,11 @@ import {
     getMousePositionOnCanvas,
     getControlPointUnderCursor,
 } from '../Helpers/calculateValues';
+import { areBezierValuesEqual } from '../Helpers/compareValues';
 
 import '../Styles/canvasBox.css'
 import { useRef, useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
-
 
 
 
@@ -37,8 +37,7 @@ function Canvas({
 }) {
 
 	/* ----------------------- variables for canvas setup ----------------------- */
-	const canvasRef = useRef(null);
-
+	
 	// constants
 	const cellSize = 40;
 	const defaultScale = 0.75;
@@ -46,6 +45,10 @@ function Canvas({
 	const minMaxOffsetX = { min: -5, max: -5 };
 	const minMaxOffsetY = { min: -19, max: 19 };
 	const scrollSpeed = 2.5; // default 1 (1 = along with cursor)
+	
+	// references
+	const canvasRef = useRef(null);
+	const containerRef = useRef(null);
 
 	// state variables
 	const [canvasSize, setCanvasSize] = useState({ width: 661, height: 500 });
@@ -65,41 +68,77 @@ function Canvas({
 	// const [snapToGrid, setSnapToGrid] = useState(false);
 
 
-	/* --------------------------- update canvas size --------------------------- */
-	const updateCanvasSize = () => {
-		if (canvasRef.current) {
-			const canvas = canvasRef.current;
-			if (parent) {
-				const { clientWidth, clientHeight } = canvas;
-				setCanvasSize({ width: clientWidth, height: clientHeight });
+	// use ResizeObserver to detect container size changes
+	useEffect(() => {
+		const container = containerRef.current;
+		if (!container) return;
+
+		const resizeObserver = new ResizeObserver((entries) => {
+			for (let entry of entries) {
+				const { width, height } = entry.contentRect;
+				setCanvasSize({ width, height });
 			}
-		}
-	};
-	// set canvas size on initial load
-	useEffect(() => {
-		updateCanvasSize();
+		});
+
+		resizeObserver.observe(container);
+		return () => resizeObserver.disconnect();
 	}, []);
-	// set canvas size on window resize
+
+
+	// Update canvas element dimensions based on container size
 	useEffect(() => {
-		// updateCanvasSize();
-		window.addEventListener('resize', updateCanvasSize);
-	}, [canvasSize.width, canvasSize.height]);
-
-
-	/* ------------ effect to draw the grid whenever offsets changes ------------ */
-	useEffect(() => {
-		// gets the current canvas dom element
-		const canvas = canvasRef.current;
-		const ctx = canvas.getContext('2d');
-
-		canvas.width = canvasSize.width;
-		canvas.height = canvasSize.height;
-
-		// draw grid
-		drawGrid(ctx, canvas.width, canvas.height, cellSize, offsetX, offsetY, scale);
-		drawCurve(ctx, controlPoint1, controlPoint2);
+		if (canvasRef.current && canvasSize.width && canvasSize.height) {
+			const canvas = canvasRef.current;
+			// Use devicePixelRatio for crisp rendering on high DPI screens
+			const dpr = window.devicePixelRatio || 1;
+			canvas.width = canvasSize.width * dpr;
+			canvas.height = canvasSize.height * dpr;
+			canvas.style.width = `${canvasSize.width}px`;
+			canvas.style.height = `${canvasSize.height}px`;
+			const ctx = canvas.getContext('2d');
+			ctx.scale(dpr, dpr);
+		
+			// Redraw the grid and curve on resize
+			drawGrid(ctx, canvasSize.width, canvasSize.height, cellSize, offsetX, offsetY, scale);
+			drawCurve(ctx, controlPoint1, controlPoint2);
+		}
 	}, [canvasSize, offsetX, offsetY, scale, controlPoint1, controlPoint2]);
 
+
+	// /* --------------------------- update canvas size --------------------------- */
+	// const updateCanvasSize = () => {
+	// 	if (canvasRef.current) {
+	// 		const canvas = canvasRef.current;
+	// 		if (parent) {
+	// 			const { clientWidth, clientHeight } = canvas;
+	// 			setCanvasSize({ width: clientWidth, height: clientHeight });
+	// 		}
+	// 	}
+	// };
+	// // set canvas size on initial load
+	// useEffect(() => {
+	// 	updateCanvasSize();
+	// }, []);
+	// // set canvas size on window resize
+	// useEffect(() => {
+	// 	// updateCanvasSize();
+	// 	window.addEventListener('resize', updateCanvasSize);
+	// }, [canvasSize.width, canvasSize.height]);
+
+
+	// /* ------------ effect to draw the grid whenever offsets changes ------------ */
+	// useEffect(() => {
+	// 	// gets the current canvas dom element
+	// 	const canvas = canvasRef.current;
+	// 	const ctx = canvas.getContext('2d');
+
+	// 	canvas.width = canvasSize.width;
+	// 	canvas.height = canvasSize.height;
+
+	// 	// draw grid
+	// 	drawGrid(ctx, canvas.width, canvas.height, cellSize, offsetX, offsetY, scale);
+	// 	drawCurve(ctx, controlPoint1, controlPoint2);
+	// }, [canvasSize, offsetX, offsetY, scale, controlPoint1, controlPoint2]);
 
 
 	/* -------------------------------------------------------------------------- */
@@ -320,13 +359,6 @@ function Canvas({
 			setDraggingControlPoint(null);
 		}
 	};
-	// when mouse leaves the canvas > stop dragging
-	const handleMouseLeave = (e) => {
-		e.preventDefault();
-		if (isDraggingGrid) {
-			setIsDraggingGrid(false);
-		}
-	};
 
 
 
@@ -344,17 +376,6 @@ function Canvas({
 
 
 
-	/* ----------------- check if current curve is already saved ---------------- */
-	const areBezierValuesEqual = (obj1, obj2, epsilon = 0.001) => {
-		const isEqual = (a, b) => Math.abs(a - b) < epsilon;
-	
-		return (
-			isEqual(obj1.cp1.X, obj2.cp1.X) &&
-			isEqual(obj1.cp1.Y, obj2.cp1.Y) &&
-			isEqual(obj1.cp2.X, obj2.cp2.X) &&
-			isEqual(obj1.cp2.Y, obj2.cp2.Y)
-		);
-	};
 	useEffect(() => {
 		const cp1X = Math.round(controlPoint1.X * 100) / 100;
 		const cp1Y = Math.round(controlPoint1.Y * 100) / 100;
@@ -399,18 +420,21 @@ function Canvas({
 	return (
 
 		<>
-			<canvas 
-				ref={canvasRef}
-				className='curve-canvas'
-				onMouseDown={handleMouseDown}
-				onMouseMove={handleMouseMove}
-				onMouseUp={handleMouseUp}
-				// onMouseLeave={handleMouseLeave}
-				onDoubleClick={handleDoubleClick}
-				onContextMenu={handleContextMenu}
-				onWheel={handleWheel}
-				style={ isDraggingGrid ? { cursor: 'grabbing' } : { cursor: 'default' }}
-			></canvas>
+			{/* <div ref={containerRef} style={{ width: '100%', height: '100%', overflow: 'hidden' }}> */}
+				<canvas 
+					ref={canvasRef}
+					className='curve-canvas'
+					onMouseDown={handleMouseDown}
+					onMouseMove={handleMouseMove}
+					onMouseUp={handleMouseUp}
+					// onMouseLeave={handleMouseLeave}
+					onDoubleClick={handleDoubleClick}
+					onContextMenu={handleContextMenu}
+					onWheel={handleWheel}
+					style={ isDraggingGrid ? { cursor: 'grabbing' } : { cursor: 'default' }}
+				>
+				</canvas>
+			{/* </div> */}
 
 
 			{

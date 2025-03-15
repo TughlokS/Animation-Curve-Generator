@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import '../Styles/presetCardContainer.css';
 import PresetCard from './PresetCard';
 import { PropTypes } from 'prop-types';
+import { motion, AnimatePresence } from 'framer-motion';
 
 
 
@@ -27,21 +29,45 @@ function PresetCardContainer({ setBezierValuesPreset, setPresetTitle, presetArra
 		}
 	}, [presetArray, activePresetId]);
 
+
 	return (
 		<div className="preset-card-container">
 
-			{sortedPresets.map((preset) => (
-				<PresetCard 
-					key={preset.id}
-					id={preset.id} 
-					title={preset.title} 
-					bezierValue={preset.bezierValue} 
-					setBezierValuesPreset={setBezierValuesPreset}
-					setPresetTitle={setPresetTitle}
-					isActive={preset.id === activePresetId}
-					setActivePresetId={setActivePresetId}
-				/>
-			))}
+			<AnimatePresence>
+				{sortedPresets.map((preset) => (
+					// <motion.div
+					// 	layout
+					// 	key={preset.id}
+					// 	initial={{ opacity: 1, y: 20 }}
+					// 	animate={{ opacity: 1, y: 0 }}
+					// 	exit={{ opacity: 0, y: -20 }}
+					// 	style={{ display: 'initial' }}
+					// 	className='motion-wrapper'
+					// >
+					// 	<PresetCard 
+					// 		key={preset.id}
+					// 		id={preset.id} 
+					// 		title={preset.title} 
+					// 		bezierValue={preset.bezierValue} 
+					// 		setBezierValuesPreset={setBezierValuesPreset}
+					// 		setPresetTitle={setPresetTitle}
+					// 		isActive={preset.id === activePresetId}
+					// 		setActivePresetId={setActivePresetId}
+					// 	/>
+					// </motion.div>
+
+					<PresetCard 
+						key={preset.id}
+						id={preset.id} 
+						title={preset.title} 
+						bezierValue={preset.bezierValue} 
+						setBezierValuesPreset={setBezierValuesPreset}
+						setPresetTitle={setPresetTitle}
+						isActive={preset.id === activePresetId}
+						setActivePresetId={setActivePresetId}
+					/>
+				))}
+			</AnimatePresence>
 
 		</div>
 	)

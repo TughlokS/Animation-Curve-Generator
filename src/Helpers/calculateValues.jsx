@@ -7,8 +7,10 @@ import { getCanvasPosition } from "./drawGrid";
  * @param {React.RefObject} canvasRef - The reference to the canvas element.
  * @returns {Object} - The mouse position { x, y } relative to the canvas.
  */
-export function getMousePositionOnCanvas(e, canvasRef) {
-    const { clientX, clientY } = e;
+export function getMousePositionOnCanvas(e, canvasRef) {    
+    const isTouch = e.type.startsWith('touch');
+    const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+    const clientY = isTouch ? e.touches[0].clientY : e.clientY;
     const canvasRect = canvasRef.current.getBoundingClientRect();
     const x = clientX - canvasRect.left;
     const y = clientY - canvasRect.top;

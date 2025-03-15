@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "animation-curve-generator": "file:",
+    "framer-motion": "^12.4.11",
     "lodash": "^4.17.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-flip-move": "^3.0.5",
     "react-tooltip": "^5.28.0",
     "uuid": "^10.0.0",
     "vite-project": "file:"
