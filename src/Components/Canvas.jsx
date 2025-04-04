@@ -221,7 +221,11 @@ function Canvas({
 	}
 
 	/* ----------------------- zoom in and out with mouse ----------------------- */
+	// This function is just for React's synthetic event system
+	// The actual preventDefault is handled by the wheel event listener added in useEffect
 	const handleWheel = (e) => {
+		// Don't call preventDefault here - it will cause errors with passive listeners
+		
 		if (e.deltaY < 0) {
 			// limit zoom in to 1x size
 			if (scale >= 1) return;
@@ -234,6 +238,17 @@ function Canvas({
 			setScale((prevScale) => prevScale / 1.1);
 		}
 	}
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		const handleWheelEvent = (e) => {
+			e.preventDefault();
+		};
+		canvas.addEventListener('wheel', handleWheelEvent, { passive: false });
+		return () => {
+			canvas.removeEventListener('wheel', handleWheelEvent);
+		};
+	}, [canvasRef]);
 
 
 
@@ -479,6 +494,13 @@ function Canvas({
 		canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
 		canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
 		
+		// Add non-passive wheel event listener to prevent page scrolling when zooming
+		// This is the proper way to prevent scrolling - using a non-passive event listener
+		const wheelHandler = (e) => {
+			e.preventDefault();
+		};
+		canvas.addEventListener('wheel', wheelHandler, { passive: false });
+		
 		touchEventsInitialized.current = true;
 		
 		// Clean up event listeners on unmount
@@ -486,8 +508,9 @@ function Canvas({
 			canvas.removeEventListener('touchstart', handleTouchStart);
 			canvas.removeEventListener('touchmove', handleTouchMove);
 			canvas.removeEventListener('touchend', handleTouchEnd);
+			canvas.removeEventListener('wheel', wheelHandler);
 		};
-	}, []);
+	}, [canvasRef.current]); // Only re-run if canvasRef changes
 
 
 

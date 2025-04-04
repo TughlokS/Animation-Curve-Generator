@@ -84,6 +84,7 @@
   max-width: 100%;
   border-radius: clamp(4px, 1vw, 7px);
   background-color: #22262e;
+  position: relative;
   transition: all 0.2s ease-in-out;
   /* Hover effect on the entire box */
   /* Hover and focus effects on input elements */
@@ -95,10 +96,6 @@
 .canvas-box .canvas-buttons .curve-value-box:hover {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
   background-color: #ff1861;
-}
-.canvas-box .canvas-buttons .curve-value-box:has(.btn:hover) {
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
-  background-color: #22262e;
 }
 .canvas-box .canvas-buttons .curve-value-box:has(input:hover) {
   background-color: #ff1861;
@@ -120,12 +117,31 @@
   background-color: transparent;
   color: #fdfdfd;
   width: clamp(35px, 6vw, 50px);
-  padding: clamp(2px, 0.8vw, 4px);
+  padding: clamp(6px, 1vw, 8px);
   font-size: clamp(12px, 1vw, 14px);
   font-weight: bold;
 }
 .canvas-box .canvas-buttons .curve-value-box .curve-values:nth-child(1), .canvas-box .canvas-buttons .curve-value-box .curve-values:nth-child(2), .canvas-box .canvas-buttons .curve-value-box .curve-values:nth-child(3) {
   border-right: clamp(1px, 0.1vw, 1px) solid rgb(202, 202, 202);
+}
+.canvas-box .canvas-buttons .icon-group-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: clamp(4px, 0.8vw, 8px);
+  border: clamp(1px, 0.2vw, 2px) solid transparent;
+  border-radius: clamp(4px, 1vw, 7px);
+  transition: all 0.2s ease-in-out;
+  /* Hover effect on the entire box */
+}
+.canvas-box .canvas-buttons .icon-group-box:hover {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
+}
+@media screen and (max-width: 480px) {
+  .canvas-box .canvas-buttons .icon-group-box {
+    gap: clamp(3px, 0.6vw, 6px);
+  }
 }
 .canvas-box .canvas-buttons .btn {
   display: flex;
@@ -239,6 +255,10 @@
   }
   .canvas-box .canvas-buttons .curve-value-box {
     gap: clamp(1px, 0.2vw, 1.5px);
+  }
+  .canvas-box .canvas-buttons .icon-group-box {
+    gap: clamp(3px, 0.6vw, 6px);
+    padding: 0;
   }
   .canvas-box .canvas-buttons .curve-value-box .curve-values {
     width: clamp(30px, 5vw, 45px);
