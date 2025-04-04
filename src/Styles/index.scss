@@ -21,41 +21,98 @@ body {
 
 .main-container {
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	justify-content: flex-start;
 	align-items: center;
 	width: 100%;
-	height: 100vh;
+	min-height: 100vh;
+	height: auto;
 	background-color: $light-primary-color;
-	border-radius: 35px;
-	padding: 45px 0;
+	border-radius: clamp(15px, 3vw, 35px);
+	padding: clamp(15px, 2.5vw, 30px) 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+	
+	@media screen and (max-width: 768px) {
+		padding: clamp(10px, 2vw, 20px) 0;
+	}
+	
+	@media screen and (min-resolution: 1.25dppx) {
+		padding: clamp(10px, 2vw, 20px) 0;
+	}
 }
 
 .enclosed-container {
-	$white-space: 1rem;
+	$white-space: clamp(0.5rem, 2vw, 1rem);
 
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	justify-content: center;
-	align-items: center;
-	gap: $white-space;
+	align-items: stretch;
+	gap: clamp(0.5rem, 2vw, 1rem);
 	padding: 0 $white-space;
-	flex-wrap: wrap;
-	max-width: 2000px;
-	width: 75%;
-	height: 100%;
+	max-width: 1800px; // Reduced from 2000px to prevent overflow at zoom levels
+	width: 85%; // Reduced from 90% to provide more margin space
+	height: auto; // Changed from 100% to auto to prevent overflow
 
-	// outline: 1px solid red;
-
-
-	@media screen and (max-width: 768px) {
-		flex-direction: row-reverse;
-		// padding: 0 1rem;
+	@media screen and (max-width: 1024px) {
+		width: 95%;
 	}
 
+	@media screen and (max-width: 1200px) {
+		width: 98%;
+	}
+	
+	// Add specific media query for high-resolution displays and zoom levels
+	@media screen and (min-resolution: 1.25dppx) {
+		max-width: 1600px;
+		width: 80%;
+		gap: clamp(0.4rem, 1.5vw, 0.8rem);
+	}
+
+	// Add specific media query for 150% zoom on 1080p screens
+	@media screen and (min-resolution: 1.5dppx) {
+		max-width: 1400px;
+		width: 75%;
+		gap: clamp(0.3rem, 1vw, 0.6rem);
+	}
+
+	@media screen and (max-width: 992px) {
+		flex-direction: column;
+		height: auto;
+		width: 95%; // Increased from 90% to give more space on tablet
+		gap: clamp(0.8rem, 3vw, 1.5rem); // Reduced gap to save vertical space
+		max-width: 650px;  // Reduced from 700px to prevent overflow
+	}
+	
+	@media screen and (max-width: 480px) {
+		gap: clamp(0.6rem, 2.5vw, 1.2rem);
+		padding: 0 clamp(0.2rem, 0.8vw, 0.4rem);
+	}
 
 	.flex-child-1 {
-		width: 50%;
+		width: 48%; // Reduced from 50% to prevent overflow
 		flex-grow: 1;
+		flex-shrink: 1; // Ensure it can shrink if needed
+		min-width: 0; // Prevents flex items from overflowing
+
+		@media screen and (max-width: 1200px) {
+			width: 45%;
+		}
+
+		// Add specific adjustments for high-resolution displays and zoom levels
+		@media screen and (min-resolution: 1.25dppx) {
+			width: 46%;
+		}
+
+		@media screen and (min-resolution: 1.5dppx) {
+			width: 45%;
+		}
+
+		@media screen and (max-width: 992px) {
+			width: 100%;
+			max-width: 100%;
+		}
 	}
 }
 

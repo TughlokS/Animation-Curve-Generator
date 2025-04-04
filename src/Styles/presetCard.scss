@@ -8,21 +8,58 @@
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
-    padding: 20px;
-    gap: 20px;
-    min-width: 185px;
-    flex: 1 1 0;
+    // Refine padding and gap for different screen sizes using clamp
+    padding: clamp(8px, 1.8vw, 20px);
+    gap: clamp(8px, 1.8vw, 20px);
+    // Set fixed height instead of aspect ratio to prevent growth
+    height: 120px;
+    // Remove min-width as we're using fixed column counts now
+    // min-width: clamp(120px, 20vw, 185px);
+    // Use width: 100% to fill the grid cell completely
+    width: 100%;
     background-color: $light-secondary-color;
-    border-radius: 25px;
+    border-radius: clamp(15px, 2.5vw, 25px);
     cursor: pointer;
-    transition: flex 0.3s cubic-bezier(0, 0, 0.5, 1.5), background-color 0.3s ease, box-shadow 0.3s ease;
-    // background var(--card-before-transition, all 0.3s ease)
+    // Add transition timing adjustments for different screen sizes
+    transition: transform 0.3s cubic-bezier(0, 0, 0.5, 1.5), background-color 0.3s ease, box-shadow 0.3s ease;
+    
+    @media screen and (max-width: 992px) {
+        height: 110px; // Adjust fixed height for this breakpoint
+        transition: transform 0.28s cubic-bezier(0, 0, 0.5, 1.4), background-color 0.28s ease, box-shadow 0.28s ease;
+    }
+    
+    @media screen and (max-width: 768px) {
+        height: 100px; // Adjust fixed height for this breakpoint
+        padding: clamp(6px, 1.5vw, 10px);
+        gap: clamp(6px, 1.5vw, 10px);
+        transition: transform 0.25s cubic-bezier(0, 0, 0.5, 1.3), background-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    
+    @media screen and (max-width: 480px) {
+        height: 90px; // Adjust fixed height for this breakpoint
+        padding: clamp(5px, 1.2vw, 8px);
+        gap: clamp(5px, 1.2vw, 8px);
+        transition: transform 0.2s cubic-bezier(0, 0, 0.5, 1.2), background-color 0.2s ease, box-shadow 0.2s ease;
+    }
 
     &:hover {
-        flex: 1.5;
-        // background-color: #11111115;
-        box-shadow: 0 0 25px $accent-color-2;
-        // box-shadow: inset 0px 0px 15px $accent-color-2;
+        // Use transform scale instead of flex for hover effect to prevent layout disruption
+        transform: scale(1.05);
+        box-shadow: 0 0 clamp(15px, 2.5vw, 25px) $accent-color-2;
+        z-index: 1; // Ensure hovered card appears above others
+        
+        @media screen and (max-width: 992px) {
+            transform: scale(1.04);
+        }
+        
+        @media screen and (max-width: 768px) {
+            transform: scale(1.03);
+        }
+        
+        @media screen and (max-width: 480px) {
+            // Very subtle expansion on mobile
+            transform: scale(1.02);
+        }
     }
     
     &::before {
@@ -33,7 +70,7 @@
         width: 0;
         height: 0;
         background-color: $accent-color-2;
-        border-radius: 25px; 
+        border-radius: clamp(15px, 2.5vw, 25px); // Match the card's border-radius
         transform: translate(-50%, -50%);
         transition: width var(--card-before-transition, 0.3s ease),
                     height var(--card-before-transition, 0.3s ease),;
@@ -43,7 +80,7 @@
     &.active::before {
         width: 100%;
         height: 100%;
-        border-radius: 25px;
+        border-radius: clamp(15px, 2.5vw, 25px); // Match the card's border-radius
     }
 
     // &.clicked {
@@ -59,22 +96,29 @@
 
         .title {
 			position: relative;
-            font-size: 16px;
+            // Make font sizes responsive
+            font-size: clamp(14px, 1.5vw, 16px);
             font-weight: 700;
+            line-height: 1.3;
 			width: 100%;
-			padding-right: 10px;
+			// Make padding responsive
+			padding-right: clamp(5px, 1.5vw, 10px);
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
         }
 
         .copy-btn {
-            padding: 5px;
-            border-radius: 7px;
+            // Improve copy button sizing for better touch targets
+            padding: clamp(3px, 0.8vw, 5px);
+            border-radius: clamp(5px, 0.7vw, 7px);
             transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            
+            @media screen and (max-width: 480px) {
+                padding: 5px; // Ensure minimum touch target on mobile
+            }
 
             &:hover {
-                // background-color: $dark-primary-color;
                 background-color: $accent-color-2;
                 box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
             }
@@ -85,12 +129,12 @@
         }
 
         .copy-btn-icon {
-            width: 20px;
-            height: 20px;
-            padding: 2.5px;
-            // border-radius: 5px;
+            // Make icon size responsive
+            width: clamp(16px, 1.8vw, 20px);
+            height: clamp(16px, 1.8vw, 20px);
+            padding: clamp(2px, 0.3vw, 2.5px);
             cursor: pointer;
-            background-color: $dark-primary-color; /* Define this variable */
+            background-color: $dark-primary-color;
             transition: background-color 0.2s ease-in-out;
 
             /* Apply the mask */
@@ -106,8 +150,10 @@
     }
 
     .body-text {
-        font-size: 16px;
+        // Make font size responsive
+        font-size: clamp(12px, 1.3vw, 16px);
         font-weight: 400;
+        line-height: 1.3;
         color: $light-text-body-color;
         white-space: nowrap;
         overflow: hidden;

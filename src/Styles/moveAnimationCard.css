@@ -25,12 +25,18 @@
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  padding: 1rem;
-  gap: 1rem;
+  padding: clamp(0.5rem, 1.5vw, 1rem);
+  gap: clamp(0.5rem, 1.5vw, 1rem);
   width: 100%;
-  background-color: #e7eef1; /* Ensure $light-secondary-color is correctly set */
-  border-radius: 15px;
+  background-color: #e7eef1;
+  border-radius: clamp(8px, 2vw, 15px);
   transition: all 0.2s ease-in-out;
+}
+@media screen and (max-width: 992px) {
+  .move-animation-card {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
 }
 .move-animation-card .animation-card-header {
   display: flex;
@@ -39,15 +45,27 @@
   flex-direction: row;
   width: 100%;
 }
+@media screen and (max-width: 480px) {
+  .move-animation-card .animation-card-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
 .move-animation-card .animation-card-header .title-body {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   flex-direction: row;
-  gap: 10px;
-  flex-grow: 1; /* Allows title and body to take available space */
-  max-width: calc(100% - 30px); /* 20px for copy button + 10px gap */
+  gap: clamp(5px, 1vw, 10px);
+  flex-grow: 1;
+  max-width: calc(100% - clamp(20px, 3vw, 30px));
   box-sizing: border-box;
+}
+@media screen and (max-width: 480px) {
+  .move-animation-card .animation-card-header .title-body {
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
 }
 .move-animation-card .animation-card-header .animation-title {
   font-size: 16px;
