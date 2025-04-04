@@ -65,7 +65,7 @@ function AnimationGroup( { presetArray, bezierValuesCurve, bezierValuesPreset, p
 
 
 	return (
-		<div className="animation-group">
+		<div className="animation-group flex-child-1">
 
 			<div className="time-slider-container">
 				

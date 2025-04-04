@@ -4,11 +4,15 @@
 
 .canvas-group {
 	display: flex;
-	justify-content: start;
+	justify-content: flex-start;
 	align-items: center;
 	flex-direction: column;
-	gap: 23px;
-	width: 50%;
-	min-width: 350px;
 	height: 100%;
+	gap: 2rem;
+	// background-color: green;
+
+	@media (max-width: 768px) {
+		width: 100%;
+		min-width: 0;
+	}
 }

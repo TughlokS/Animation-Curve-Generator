@@ -31,15 +31,32 @@ body {
 }
 
 .enclosed-container {
+	$white-space: 1rem;
+
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
-	align-items: start;
-	flex-direction: row;
-	gap: 23px;
-	max-width: 1440px;
+	align-items: center;
+	gap: $white-space;
+	padding: 0 $white-space;
+	flex-wrap: wrap;
+	max-width: 2000px;
+	width: 75%;
 	height: 100%;
 
-	// border: 1px solid red;
+	// outline: 1px solid red;
+
+
+	@media screen and (max-width: 768px) {
+		flex-direction: row-reverse;
+		// padding: 0 1rem;
+	}
+
+
+	.flex-child-1 {
+		width: 50%;
+		flex-grow: 1;
+	}
 }
 
 

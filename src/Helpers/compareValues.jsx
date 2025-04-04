@@ -12,3 +12,20 @@ export const areBezierValuesEqual = (bv1, bv2, epsilon = 0.001) => {
 		isEqual(bv1.cp2.Y, bv2.cp2.Y)
 	);
 };
+
+
+/* --------------------- checks if bezierValue is valid --------------------- */
+export const isValidBezierValue = (value) => {
+	if (value &&
+		value.cp1 &&
+		typeof value.cp1.X === 'number' &&
+		typeof value.cp1.Y === 'number' &&
+		value.cp2 &&
+		typeof value.cp2.X === 'number' &&
+		typeof value.cp2.Y === 'number'
+	) {
+		return true;
+	}
+
+	return false;
+};

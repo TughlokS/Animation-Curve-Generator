@@ -45,10 +45,22 @@ body {
 
 .enclosed-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: start;
-  flex-direction: row;
-  gap: 23px;
-  max-width: 1440px;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+  flex-wrap: wrap;
+  max-width: 2000px;
+  width: 75%;
   height: 100%;
+}
+@media screen and (max-width: 768px) {
+  .enclosed-container {
+    flex-direction: row-reverse;
+  }
+}
+.enclosed-container .flex-child-1 {
+  width: 50%;
+  flex-grow: 1;
 }/*# sourceMappingURL=index.css.map */
