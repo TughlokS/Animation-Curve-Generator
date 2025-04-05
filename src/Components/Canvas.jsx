@@ -93,7 +93,7 @@ function Canvas({
 			
 			// Calculate the desired padding percentage (consistent gap around canvas)
 			// We want the canvas to take up most of the space but leave a consistent gap
-			const desiredPaddingPercent = 0.05; // 5% padding on each side
+			const desiredPaddingPercent = 0.025; // 5% padding on each side
 			const targetPadding = boxWidth * desiredPaddingPercent;
 			
 			// Calculate the target width based on the desired padding

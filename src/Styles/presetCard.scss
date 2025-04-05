@@ -21,7 +21,7 @@
     border-radius: clamp(15px, 2.5vw, 25px);
     cursor: pointer;
     // Add transition timing adjustments for different screen sizes
-    transition: transform 0.3s cubic-bezier(0, 0, 0.5, 1.5), background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     
     @media screen and (max-width: 992px) {
         height: 110px; // Adjust fixed height for this breakpoint
