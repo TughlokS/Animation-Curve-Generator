@@ -316,6 +316,9 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
 			<div className="canvas-buttons">
 				<div className="curve-value-box">
 					<CurveInputs bezierValues={bezierValues} onChange={handleCurveValueChange} />
+				</div>
+
+				<div className="icon-group-box">
 					<div
 						className={`btn setting-btn ${isSettingsOpen ? 'active' : ''}`}
 						data-tooltip-id="tooltip"
@@ -326,17 +329,17 @@ function CanvasBox({ bezierValues, setBezierValue, presetArray, setPresetArray }
 					>
 						<div className={`icon-btn setting-btn-icon ${isSettingsOpen ? 'active' : ''}`}></div>
 					</div>
-				</div>
 
-				<div
-					className={`btn grid-btn ${snapToGrid ? 'active' : ''}`}
-					data-tooltip-id="tooltip"
-					data-tooltip-content="Snap to Grid"
-					role="button"
-					tabIndex={0}
-					onClick={() => setSnapToGrid((prev) => !prev)}
-				>
-					<div className={`icon-btn grid-btn-icon ${snapToGrid ? 'active' : ''}`}></div>
+					<div
+						className={`btn grid-btn ${snapToGrid ? 'active' : ''}`}
+						data-tooltip-id="tooltip"
+						data-tooltip-content="Snap to Grid"
+						role="button"
+						tabIndex={0}
+						onClick={() => setSnapToGrid((prev) => !prev)}
+					>
+						<div className={`icon-btn grid-btn-icon ${snapToGrid ? 'active' : ''}`}></div>
+					</div>
 				</div>
 
 				<div

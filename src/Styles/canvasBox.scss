@@ -7,27 +7,37 @@
 	justify-content: flex-start;
 	align-items: center;
 	flex-direction: column;
-	padding: 25px;
-	gap: 23px;
+	padding: clamp(15px, 1vw, 25px);	
+	gap: clamp(12px, 1vw, 23px);
 	background-color: $light-secondary-color;
-	border-radius: 35px;
+	border-radius: clamp(15px, 3vw, 35px);
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+	
+	@media screen and (max-width: 992px) {
+		padding: clamp(10px, 2vw, 15px);
+	}
 
 
 	canvas {
-		width: 661px;
-		height: 500px;
-		// min-height: 600px;
-		border: 2px solid transparent;
+		// Let JavaScript handle width and height
+		// width and height are now set directly in the style attribute
+		border: clamp(1px, 0.2vw, 2px) solid transparent;
 		background-color: $dark-secondary-color;
-		border-radius: 15px;
+		border-radius: clamp(8px, 1.5vw, 15px);
 		box-shadow: inset 0px 0px 15px $drop-shadow-color; 
-
+		box-sizing: border-box;
 		transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
 
 		&:hover {
-			// box-shadow: inset 0px 0px 35px #bb135356;
 			box-shadow: inset 0px 0px 20px $accent-color-1;
 			border-color: $accent-color-1;
+		}
+		// Media queries removed - sizing now handled by JavaScript
+		
+		@media screen and (max-width: 480px) {
+			aspect-ratio: 1 / 1;
 		}
 	}
 
@@ -37,9 +47,17 @@
 		justify-content: center;
 		align-items: center;
 		flex-direction: row;
-		gap: 23px;
+		flex-wrap: wrap; // Allow wrapping at all screen sizes to prevent overflow
+		gap: clamp(8px, 1.5vw, 15px); // Reduced gap to prevent overflow
 		width: 100%;
-		height: 50px;
+		min-height: clamp(40px, 5vw, 50px); // Changed from fixed height to min-height
+		padding: clamp(5px, 1vw, 10px) 0; // Add padding for better spacing
+		
+		@media screen and (max-width: 480px) {
+			flex-wrap: wrap;
+			height: auto;
+			padding: 10px 0;
+		}
 
 
 		.curve-value-box {
@@ -47,11 +65,12 @@
 			justify-content: center;
 			align-items: center;
 			flex-direction: row;
-			gap: 2px;
-			border: 2px solid transparent;
-
-			border-radius: 7px;
+			gap: clamp(1px, 0.3vw, 2px); // Reduced gap
+			border: clamp(1px, 0.2vw, 2px) solid transparent;
+			max-width: 100%; // Ensure it doesn't overflow its container
+			border-radius: clamp(4px, 1vw, 7px);
 			background-color: $dark-primary-color;
+			position: relative; // For positioning the copy button
 
 			transition: all 0.2s ease-in-out;
 
@@ -63,11 +82,6 @@
 			&:hover {
 				box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
 				background-color: $accent-color-1;
-			}
-
-			&:has(.btn:hover) {
-				box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
-				background-color: $dark-primary-color;
 			}
 		
 			/* Hover and focus effects on input elements */
@@ -95,9 +109,9 @@
 				outline: none;
 				background-color: transparent;
 				color: $light-secondary-color;
-				width: 60px;
-				padding: 5px;
-				font-size: 16px;
+				width: clamp(35px, 6vw, 50px); // Reduced width to prevent overflow
+				padding: clamp(6px, 1vw, 8px); // Increased padding to restore height
+				font-size: clamp(12px, 1vw, 14px); // Smaller font size
 				font-weight: bold;
 				// transition: all 0.2s ease-in-out;
 
@@ -105,7 +119,31 @@
 			}
 
 			.curve-values:nth-child(1), .curve-values:nth-child(2), .curve-values:nth-child(3) {
-				border-right: 1px solid rgb(202, 202, 202);
+				border-right: clamp(1px, 0.1vw, 1px) solid rgb(202, 202, 202);
+			}
+
+
+		}
+
+		// New icon group box for settings and grid buttons
+		.icon-group-box {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: row;
+			gap: clamp(8px, 1.5vw, 15px);
+			border: clamp(1px, 0.2vw, 2px) solid transparent;
+			border-radius: clamp(4px, 1vw, 7px);
+			transition: all 0.2s ease-in-out;
+
+			/* Hover effect on the entire box */
+			&:hover {
+				box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
+			}
+
+			// Responsive adjustments
+			@media screen and (max-width: 480px) {
+				gap: clamp(3px, 0.6vw, 6px); // Slightly reduce gap on mobile
 			}
 		}
 
@@ -113,10 +151,17 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			padding: 3px;
-			border-radius: 5px;
+			padding: clamp(2px, 0.6vw, 3px); // Reduced padding
+			border-radius: clamp(3px, 0.8vw, 5px);
 			background-color: $light-secondary-color;
 			transition: all 0.2s ease-in-out;
+			width: clamp(28px, 4vw, 36px); // Reduced width
+			height: clamp(28px, 4vw, 36px); // Reduced height
+			
+			@media screen and (max-width: 480px) {
+				width: 40px;  // Larger minimum size on mobile for touch targets
+				height: 40px;
+			}
 
 			&.active {
 				background-color: $accent-color-1;
@@ -144,8 +189,8 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			width: 24px;
-			height: 24px;
+			width: clamp(18px, 3vw, 22px); // Responsive width
+			height: clamp(18px, 3vw, 22px); // Responsive height
 			border-radius: 10px;
 			background-color: $dark-primary-color;
 			cursor: pointer;
@@ -225,6 +270,50 @@
 
 }
 
+// Media queries for high-resolution displays and zoom levels
+@media screen and (min-resolution: 120dpi), screen and (min-resolution: 1.2dppx) {
+	.canvas-box {
+		.canvas-buttons {
+			gap: clamp(6px, 1.2vw, 12px); // Further reduce gap at high-res/zoom
+			
+			.curve-value-box {
+				gap: clamp(1px, 0.2vw, 1.5px); // Tighter spacing
+			}
+			
+			.icon-group-box {
+				gap: clamp(3px, 0.6vw, 6px); // Tighter spacing for icons at high-res
+				padding: 0; // No padding
+			}
+			
+			.curve-value-box {
+				.curve-values {
+					width: clamp(30px, 5vw, 45px); // Narrower inputs
+					padding: clamp(1px, 0.5vw, 3px); // Smaller padding
+					font-size: clamp(11px, 0.9vw, 13px); // Smaller font
+				}
+			}
+			
+			.btn {
+				width: clamp(26px, 3.5vw, 32px); // Smaller buttons
+				height: clamp(26px, 3.5vw, 32px); // Smaller buttons
+				
+				.icon-btn {
+					width: clamp(16px, 2.5vw, 20px); // Smaller icons
+					height: clamp(16px, 2.5vw, 20px); // Smaller icons
+				}
+			}
+		}
+	}
+}
+
+// Additional media query for extreme zoom levels (150%+)
+@media screen and (min-resolution: 144dpi), screen and (min-resolution: 1.5dppx) {
+	.canvas-box {
+		.canvas-buttons {
+			padding: clamp(4px, 0.8vw, 8px) 0; // Even more compact
+		}
+	}
+}
 
 #tooltip {
 	border-radius: 10px;

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import useOverflow from '../Hooks/useOverFlow';
 import usePopup from '../Hooks/usePopup';
 import { PopupPositions } from '../Constants/popupConstants';
+import { isValidBezierValue } from '../Helpers/compareValues';
 
 
 
@@ -38,6 +39,11 @@ function PresetCard({
         isActive: PropTypes.bool.isRequired,
         setActivePresetId: PropTypes.func.isRequired
     }
+
+
+    bezierValue = isValidBezierValue(bezierValue) 
+        ? bezierValue 
+        : { cp1: { X: 0.4, Y: 1 }, cp2: { X: 0.4, Y: 1 } };
 
     const uniqueId = useId();
     const { cp1, cp2 } = bezierValue;

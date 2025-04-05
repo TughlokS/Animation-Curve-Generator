@@ -85,7 +85,7 @@ function CanvasGroup({ setMainPresetArray, bezierValues, setBezierValues, setBez
 
 
 	return (
-		<div className="canvas-group">
+		<div className="canvas-group flex-child-1">
 
 			<CanvasBox 
 				bezierValues={bezierValues} 

@@ -3,22 +3,33 @@
 
 
 .animation-group {
+	position: relative;
 	display: flex;
-	justify-content: start;
+	justify-content: flex-start;
 	align-items: center;
 	flex-direction: column;
-	width: 50%;
 	height: 100%;
-	gap: 23px;
-	padding: 25px;
-	border-radius: 35px;
+	gap: clamp(0.75rem, 2vw, 1.5rem);
+	padding: clamp(0.75rem, 2vw, 1.5rem);
+	border-radius: clamp(15px, 3vw, 35px);
 	background-color: $light-secondary-color;
+	
+	@media screen and (max-width: 992px) {
+		padding: clamp(0.5rem, 1.5vw, 1rem);
+		gap: clamp(0.5rem, 1.5vw, 1rem);
+	}
+	
+	@media screen and (max-width: 480px) {
+		padding: 0.5rem;
+		gap: 0.5rem;
+	}
+	// border: 1px solid green;
 
-	// &:has(.move-animation-card:hover) .move-animation-card {
-	// 	filter: blur(5px) opacity(0.1);
-	// }
+	&:has(.move-animation-card:hover) .move-animation-card {
+		filter: blur(5px) opacity(0.3) brightness(0);
+	}
 
-	// &:hover .move-animation-card:hover {
-	// 	filter: none;
-	// }
+	&:hover .move-animation-card:hover {
+		filter: none;
+	}
 }

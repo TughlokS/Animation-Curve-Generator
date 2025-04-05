@@ -4,37 +4,83 @@
 
 .preset-card-container {
 	position: relative;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	align-items: center;
+	display: grid;
+	// Use auto-fit with minmax to automatically adjust columns based on available space
+	// This will switch from 3 to 2 columns when there's not enough width
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+	// Increase minimum gap to ensure proper spacing at all sizes
+	gap: clamp(1.5rem, 0.5vw, 2.5rem);
 	width: 100%;
-	// padding: top right bottom left
-	padding: 20px 10px 20px 20px;
-	border: 4px solid $light-secondary-color;
-	border-radius: 35px;
+	// Standardize padding for visual consistency
+	padding: clamp(10px, 2vw, 20px);
+	// No extra padding on the right - we'll handle scrollbar differently
+	border: clamp(2px, 0.4vw, 4px) solid $light-secondary-color;
+	border-radius: clamp(15px, 3vw, 35px);
+	// Set minimum height to ensure at least one card is visible
+	min-height: 200px; // Increased for better visibility
 	height: 100%;
-	gap: 20px;
+	max-height: 50vh; // Limit maximum height to ensure it doesn't take over the screen
 
-	overflow-y: scroll;
+	// Add more granular breakpoints for smoother transitions
+	// Use fixed column counts at each breakpoint to prevent overlap at intermediate sizes
+	@media screen and (max-width: 992px) {
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+		gap: clamp(1.4rem, 3.8vw, 2.3rem);
+		min-height: 170px; // Adjust minimum height for this breakpoint
+	}
+
+	@media screen and (max-width: 768px) {
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr));
+		gap: clamp(1.3rem, 3.5vw, 2rem);
+		min-height: 160px; // Adjust minimum height for this breakpoint
+	}
+
+	@media screen and (max-width: 576px) {
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr));
+		gap: clamp(1.2rem, 3.2vw, 1.8rem);
+		min-height: 150px; // Adjust minimum height for this breakpoint
+	}
+
+	@media screen and (max-width: 480px) {
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 110px), 1fr));
+		gap: clamp(1rem, 3vw, 1.5rem);
+		min-height: 140px; // Adjust minimum height for this breakpoint
+	}
+
+	@media screen and (max-width: 360px) {
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr));
+		gap: clamp(0.8rem, 2.5vw, 1.2rem);
+		min-height: 130px; // Adjust minimum height for this breakpoint
+	}
+
+	overflow-y: auto; // Changed to auto to only show scrollbar when needed
 	overflow-x: hidden;
 	-webkit-overflow-scrolling: touch;
-	// outline: 1px solid red;
+	scroll-behavior: smooth; // Smoother scrolling experience
 
-	/* Custom scrollbar for WebKit browsers */
+	/* Refine scrollbar styling for better integration */
 	&::-webkit-scrollbar {
-		width: 10px;
+		width: clamp(5px, 1vw, 10px);
 	}
 
 	&::-webkit-scrollbar-track {
 		background: #d1d1d1;
-		border-radius: 10px;
-		margin: 30px;
+		border-radius: clamp(5px, 1vw, 10px);
+		// Align with container padding - use same padding as container
+		margin: clamp(10px, 2vw, 20px);
 	}
 
 	&::-webkit-scrollbar-thumb {
 		background-color: $accent-color-2;
-		border-radius: 10px;
-		// border: 2px solid $light-secondary-color;
+		// Make responsive like track
+		border-radius: clamp(5px, 1vw, 10px);
+	}
+	
+	// Use scrollbar-gutter to reserve space for the scrollbar without affecting layout
+	scrollbar-gutter: stable;
+	
+	// For Firefox and other browsers that don't support scrollbar-gutter
+	@supports not (scrollbar-gutter: stable) {
+		padding-right: calc(clamp(10px, 2vw, 20px) + 10px); // Add a bit more space for scrollbar
 	}
 }

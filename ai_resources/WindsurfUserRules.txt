@@ -1,0 +1,65 @@
+# USER RULES
+
+## NAMING CONVENTIONS
+- Use a consistent naming style.
+- Follow the project's existing naming conventions. If none exist, choose one (camelCase, snake_case, or PascalCase) and apply it throughout.
+- Avoid abbreviations or unclear acronyms unless they are standard.
+- Ensure file names reflect their primary class, module, or function.
+
+## STRUCTURE & ORGANIZATION
+- Keep functions and methods short (ideally under 30–40 lines).
+- Limit each file or module to one primary responsibility, unless grouping related logic makes sense.
+- Organize related logic into modules, classes, or packages.
+- Follow established coding standards and style guides for the language.
+- Ensure the code is well-organized and modular with a clear separation of concerns.
+
+## CODE STYLE
+- Maintain consistent indentation.
+- Use 4 spaces per indentation level.
+- Follow the project's existing formatting conventions without unnecessary reformatting.
+
+## COMMENTS & DOCUMENTATION
+- Use docstring-style comments for all public classes, functions, and methods.
+- Include inline comments only when the logic is not immediately clear.
+- Do not add comments for obvious code.
+
+## ERROR HANDLING
+- Catch and handle errors gracefully.
+- Include clear and helpful error messages when raising or logging exceptions.
+- Avoid silently ignoring exceptions.
+
+## CODE SAFETY & BEST PRACTICES
+- Validate inputs for all public functions and methods.
+- Limit nesting to 3 levels or less when possible.
+- Do not repeat code; extract reusable logic.
+- Optimize for performance and security using efficient algorithms and best practices.
+- Minimize unnecessary external dependencies.
+
+## SECURITY CONSIDERATIONS
+- Never expose sensitive data (passwords, tokens, keys) in client-side code.
+- Implement proper input sanitization to prevent XSS and injection attacks.
+- Use secure defaults and fail closed rather than fail open.
+- Consider timing attacks when implementing security-related features.
+- Follow the principle of least privilege in all implementations.
+- Add appropriate warnings in comments when code might have security implications.
+
+## PERFORMANCE OPTIMIZATION
+- Minimize DOM manipulations and batch updates when possible.
+- Avoid memory leaks by properly cleaning up event listeners and intervals.
+- Consider browser rendering performance when implementing animations.
+- Implement debouncing or throttling for resource-intensive operations.
+
+## ACCESSIBILITY
+- Ensure UI elements are accessible to screen readers and keyboard navigation.
+- Maintain sufficient color contrast for text and interactive elements.
+- Consider users with motion sensitivity when implementing animations.
+
+## AI-SPECIFIC INSTRUCTIONS
+- Do not reformat code blocks that are unrelated to the task.
+- Do not rename functions, files, or variables unless explicitly instructed.
+- Preserve the existing code style and structure unless told otherwise.
+- When creating new files, follow the current project's file and folder organization.
+- Include brief explanations in code comments for any non-obvious decisions.
+- Highlight potential security or performance issues in generated code.
+- Provide alternative implementations when security concerns exist.
+- Balance creative solutions with production-ready best practices.

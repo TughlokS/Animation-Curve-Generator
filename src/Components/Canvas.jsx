@@ -46,11 +46,15 @@ function Canvas({
 	const minMaxOffsetY = { min: -19, max: 19 };
 	const scrollSpeed = 2.5; // default 1 (1 = along with cursor)
 	
+	// Flag to track if touch events have been initialized
+	const touchEventsInitialized = useRef(false);
+	
 	// references
 	const canvasRef = useRef(null);
 	const containerRef = useRef(null);
 
 	// state variables
+	// Initialize with responsive dimensions that will be updated by ResizeObserver
 	const [canvasSize, setCanvasSize] = useState({ width: 661, height: 500 });
 	const [offsetX, setOffsetX] = useState(defaultOffset.x);
 	const [offsetY, setOffsetY] = useState(defaultOffset.y);
@@ -68,20 +72,72 @@ function Canvas({
 	// const [snapToGrid, setSnapToGrid] = useState(false);
 
 
-	// use ResizeObserver to detect container size changes
+	// Direct window resize handler for canvas responsiveness
 	useEffect(() => {
-		const container = containerRef.current;
-		if (!container) return;
-
-		const resizeObserver = new ResizeObserver((entries) => {
-			for (let entry of entries) {
-				const { width, height } = entry.contentRect;
-				setCanvasSize({ width, height });
+		// Function to calculate and set canvas size based on window size
+		const updateCanvasSize = () => {
+			// Get the parent container width (canvas-box)
+			const canvasBox = document.querySelector('.canvas-box');
+			if (!canvasBox) return;
+			
+			// Calculate available width (accounting for padding)
+			const boxStyle = window.getComputedStyle(canvasBox);
+			const paddingLeft = parseFloat(boxStyle.paddingLeft);
+			const paddingRight = parseFloat(boxStyle.paddingRight);
+			
+			// Get the total canvas box width and available width
+			const boxWidth = canvasBox.clientWidth;
+			const availableWidth = boxWidth - paddingLeft - paddingRight;
+			
+			if (availableWidth <= 0) return;
+			
+			// Calculate the desired padding percentage (consistent gap around canvas)
+			// We want the canvas to take up most of the space but leave a consistent gap
+			const desiredPaddingPercent = 0.025; // 5% padding on each side
+			const targetPadding = boxWidth * desiredPaddingPercent;
+			
+			// Calculate the target width based on the desired padding
+			const targetWidth = boxWidth - (targetPadding * 2);
+			
+			// Set aspect ratio based on screen size
+			let aspectRatio = 661 / 500; // Default aspect ratio
+			
+			// Adjust aspect ratio based on screen width
+			if (window.innerWidth <= 480) {
+				aspectRatio = 1; // 1:1 for mobile
+			} else if (window.innerWidth <= 768) {
+				aspectRatio = 4 / 3; // 4:3 for tablets
 			}
-		});
+			
+			// Calculate height based on width and aspect ratio
+			const height = targetWidth / aspectRatio;
+			
+			console.log('Canvas size updated:', { 
+				width: targetWidth, 
+				height, 
+				boxWidth, 
+				availableWidth, 
+				padding: targetPadding
+			});
+			
+			// Set canvas size state
+			setCanvasSize({ width: targetWidth, height });
+		};
 
-		resizeObserver.observe(container);
-		return () => resizeObserver.disconnect();
+		// Initial size calculation
+		updateCanvasSize();
+		
+		// Update on window resize
+		window.addEventListener('resize', updateCanvasSize);
+		
+		// Also update when the component mounts and after a short delay
+		// This helps with initial rendering issues
+		const timeoutId = setTimeout(updateCanvasSize, 100);
+		
+		return () => {
+			window.removeEventListener('resize', updateCanvasSize);
+			clearTimeout(timeoutId);
+		};
 	}, []);
 
 
@@ -91,15 +147,30 @@ function Canvas({
 			const canvas = canvasRef.current;
 			// Use devicePixelRatio for crisp rendering on high DPI screens
 			const dpr = window.devicePixelRatio || 1;
+			
+			console.log('Applying canvas size:', canvasSize);
+			
+			// Set canvas dimensions with device pixel ratio for sharp rendering
 			canvas.width = canvasSize.width * dpr;
 			canvas.height = canvasSize.height * dpr;
+			
+			// Set display size (CSS) - force the canvas to take these exact dimensions
 			canvas.style.width = `${canvasSize.width}px`;
 			canvas.style.height = `${canvasSize.height}px`;
+			
+			// Get context and scale it
 			const ctx = canvas.getContext('2d');
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			ctx.scale(dpr, dpr);
-		
-			// Redraw the grid and curve on resize
-			drawGrid(ctx, canvasSize.width, canvasSize.height, cellSize, offsetX, offsetY, scale);
+			
+			// Calculate adjusted cell size based on canvas width
+			// This ensures the grid scales properly with the canvas size
+			const originalWidth = 661;
+			const widthRatio = canvasSize.width / originalWidth;
+			const adjustedCellSize = cellSize * (widthRatio > 1 ? 1 : widthRatio);
+			
+			// Redraw the grid and curve on resize with adjusted cell size
+			drawGrid(ctx, canvasSize.width, canvasSize.height, adjustedCellSize, offsetX, offsetY, scale);
 			drawCurve(ctx, controlPoint1, controlPoint2);
 		}
 	}, [canvasSize, offsetX, offsetY, scale, controlPoint1, controlPoint2]);
@@ -150,7 +221,11 @@ function Canvas({
 	}
 
 	/* ----------------------- zoom in and out with mouse ----------------------- */
+	// This function is just for React's synthetic event system
+	// The actual preventDefault is handled by the wheel event listener added in useEffect
 	const handleWheel = (e) => {
+		// Don't call preventDefault here - it will cause errors with passive listeners
+		
 		if (e.deltaY < 0) {
 			// limit zoom in to 1x size
 			if (scale >= 1) return;
@@ -163,6 +238,17 @@ function Canvas({
 			setScale((prevScale) => prevScale / 1.1);
 		}
 	}
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		const handleWheelEvent = (e) => {
+			e.preventDefault();
+		};
+		canvas.addEventListener('wheel', handleWheelEvent, { passive: false });
+		return () => {
+			canvas.removeEventListener('wheel', handleWheelEvent);
+		};
+	}, [canvasRef]);
 
 
 
@@ -396,6 +482,35 @@ function Canvas({
 		// 	saveRef.current();
 		// }
 	}, [controlPoint1, controlPoint2, presetArray, setIsSaved]);
+	
+	// Set up touch event listeners with { passive: false } to allow preventDefault()
+	useEffect(() => {
+		if (!canvasRef.current || touchEventsInitialized.current) return;
+		
+		const canvas = canvasRef.current;
+		
+		// Add non-passive touch event listeners
+		canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+		canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+		canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+		
+		// Add non-passive wheel event listener to prevent page scrolling when zooming
+		// This is the proper way to prevent scrolling - using a non-passive event listener
+		const wheelHandler = (e) => {
+			e.preventDefault();
+		};
+		canvas.addEventListener('wheel', wheelHandler, { passive: false });
+		
+		touchEventsInitialized.current = true;
+		
+		// Clean up event listeners on unmount
+		return () => {
+			canvas.removeEventListener('touchstart', handleTouchStart);
+			canvas.removeEventListener('touchmove', handleTouchMove);
+			canvas.removeEventListener('touchend', handleTouchEnd);
+			canvas.removeEventListener('wheel', wheelHandler);
+		};
+	}, [canvasRef.current]); // Only re-run if canvasRef changes
 
 
 
@@ -417,10 +532,71 @@ function Canvas({
 	/* -------------------------------------------------------------------------- */
 	/*                              RETURN STATEMENT                              */
 	/* -------------------------------------------------------------------------- */
+	
+	// Touch event handlers
+	const handleTouchStart = (e) => {
+		// Note: preventDefault() is handled via the non-passive event listener setup
+		
+		if (e.touches.length === 1) {
+			const touch = e.touches[0];
+			const touchEvent = {
+				clientX: touch.clientX,
+				clientY: touch.clientY,
+				button: 0, // Simulate left mouse button
+				preventDefault: () => {}
+			};
+			
+			// Use the same logic as mouse down
+			handleMouseDown(touchEvent);
+		} else if (e.touches.length === 2) {
+			// Two finger touch could be used for panning (similar to right-click drag)
+			const touch = e.touches[0];
+			const touchEvent = {
+				clientX: touch.clientX,
+				clientY: touch.clientY,
+				button: 2, // Simulate right mouse button for panning
+				preventDefault: () => {}
+			};
+			
+			handleMouseDown(touchEvent);
+		}
+		return false; // Prevent default behavior
+	};
+	
+	const handleTouchMove = (e) => {
+		// Note: preventDefault() is handled via the non-passive event listener setup
+		
+		if (e.touches.length >= 1) {
+			const touch = e.touches[0];
+			const touchEvent = {
+				clientX: touch.clientX,
+				clientY: touch.clientY,
+				preventDefault: () => {}
+			};
+			
+			// Use the same logic as mouse move
+			handleMouseMove(touchEvent);
+		}
+		return false; // Prevent default behavior
+	};
+	
+	const handleTouchEnd = (e) => {
+		// Note: preventDefault() is handled via the non-passive event listener setup
+		
+		const touchEvent = {
+			button: 0, // Simulate left mouse button release
+			preventDefault: () => {}
+		};
+		
+		// Use the same logic as mouse up
+		handleMouseUp(touchEvent);
+		return false; // Prevent default behavior
+	};
+	
 	return (
 
 		<>
-			{/* <div ref={containerRef} style={{ width: '100%', height: '100%', overflow: 'hidden' }}> */}
+			<div className='canvas-container' style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
 				<canvas 
 					ref={canvasRef}
 					className='curve-canvas'
@@ -431,10 +607,15 @@ function Canvas({
 					onDoubleClick={handleDoubleClick}
 					onContextMenu={handleContextMenu}
 					onWheel={handleWheel}
-					style={ isDraggingGrid ? { cursor: 'grabbing' } : { cursor: 'default' }}
+					style={{ 
+						width: `${canvasSize.width}px`, 
+						height: `${canvasSize.height}px`,
+						cursor: isDraggingGrid ? 'grabbing' : 'default',
+						touchAction: 'none' // Disable browser's default touch actions
+					}}
 				>
 				</canvas>
-			{/* </div> */}
+			</div>
 
 
 			{
